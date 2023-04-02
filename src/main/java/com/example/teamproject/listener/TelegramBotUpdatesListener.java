@@ -8,14 +8,12 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.annotation.PostConstruct;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -91,7 +89,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                     Integer telephone = Integer.valueOf(matcher.group(1)); // получаем телефон
                                     String name = matcher.group(3); // получаем имя
                                     String messageText = matcher.group(5); // получаем текст сообщения
-                                    userContactService.addUserContact(chatId,name,telephone); // создаем и пишем контакт в базу
+                                    userContactService.addUserContact(chatId,name,telephone/*messageText */); // создаем и пишем контакт в базу
                                     SendMessage message = new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
                                     telegramBot.execute(message);
                                 } catch (DateTimeParseException e) {
