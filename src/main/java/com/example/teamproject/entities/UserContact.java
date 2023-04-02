@@ -9,11 +9,11 @@ public class UserContact {
     @Id
     @GeneratedValue
     private Long id;
-    private int chatId;
+    private Long chatId;
     private String name;
     private int phoneNumber;
 
-    public UserContact(int chatId, String name, int phoneNumber) {
+    public UserContact(Long chatId, String name, int phoneNumber) {
         this.chatId = chatId;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -23,11 +23,11 @@ public class UserContact {
 
     }
 
-    public int getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 
-    public void setChatId(int chatId) {
+    public void setChatId(Long chatId) {
         this.chatId = chatId;
     }
 

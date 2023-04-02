@@ -1,6 +1,7 @@
 package com.example.teamproject.listener;
 
 import com.example.teamproject.service.TelegramBotService;
+import com.example.teamproject.service.UserContactService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
@@ -13,7 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class TelegramBotUpdatesListener implements UpdatesListener {
@@ -24,13 +30,17 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Autowired
    private TelegramBotService telegramBotService;
 
+    @Autowired
+    private UserContactService userContactService;
+
     private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
     @PostConstruct
     public void init() {
         telegramBot.setUpdatesListener(this);
     }
-
+    private static final Pattern TELEPHONE_MESSAGE = Pattern.compile(
+            "(\\d{11})(\\s)([А-яA-z)]+)(\\s)([А-яA-z)\\s\\d]+)"); // парсим сообщение на группы по круглым скобкам
     @Override
     public int process(List<Update> updates) {
         try {
@@ -73,8 +83,24 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
                         case "3" -> telegramBot.execute(new SendMessage(chatId, "что-то делаем3"));
                         case "позвать волонтера" -> telegramBot.execute(new SendMessage(chatId, "Зовем волонтера"));
-                        case "записать данные" ->
-                                telegramBot.execute(new SendMessage(chatId, "тут должен быть метод записать данные"));
+                        case "записать данные" -> {
+                            telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Ваш вопрос."));
+                            Matcher matcher = TELEPHONE_MESSAGE.matcher(data);
+                            if (matcher.find()) {  //find запускает matcher
+                                try {
+                                    Integer telephone = Integer.valueOf(matcher.group(1)); // получаем телефон
+                                    String name = matcher.group(3); // получаем имя
+                                    String messageText = matcher.group(5); // получаем текст сообщения
+                                    userContactService.addUserContact(chatId,name,telephone); // создаем и пишем контакт в базу
+                                    SendMessage message = new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
+                                    telegramBot.execute(message);
+                                } catch (DateTimeParseException e) {
+                                    SendMessage messageEx = new SendMessage(chatId, "Некорректный формат номера телефона или сообщения");
+                                    telegramBot.execute(messageEx);
+                                }
+                            }
+                        }
+
                     }
                     return;
                 }
