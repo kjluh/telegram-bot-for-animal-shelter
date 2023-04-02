@@ -1,3 +1,5 @@
 databaseChangeLog:
-    - include:
-          file: liquibase/scripts/userContact.sql
+
+  - changeSet:
+      id: 1
+      author: konstantin
