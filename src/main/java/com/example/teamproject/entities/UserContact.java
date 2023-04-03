@@ -19,9 +19,7 @@ public class UserContact {
         this.phoneNumber = phoneNumber;
     }
 
-    public UserContact() {
-
-    }
+    public UserContact() {}
 
     public Long getChatId() {
         return chatId;
