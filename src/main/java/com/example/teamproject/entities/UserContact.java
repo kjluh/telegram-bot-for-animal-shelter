@@ -1,4 +1,4 @@
-package com.example.teamproject.configuration.entities;
+package com.example.teamproject.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +12,15 @@ public class UserContact {
     private Long chatId;
     private String name;
     private int phoneNumber;
+
+    public UserContact(Long chatId, String name, int phoneNumber) {
+        this.chatId = chatId;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public UserContact() {
+    }
 
     public Long getChatId() {
         return chatId;
