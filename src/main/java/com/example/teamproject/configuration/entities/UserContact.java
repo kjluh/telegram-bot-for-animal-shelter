@@ -1,27 +1,17 @@
-package com.example.teamproject.entities;
+package com.example.teamproject.configuration.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 @Entity
 public class UserContact {
+
     @Id
     @GeneratedValue
     private Long id;
     private Long chatId;
     private String name;
     private int phoneNumber;
-
-    public UserContact(Long chatId, String name, int phoneNumber) {
-        this.chatId = chatId;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-    }
-
-    public UserContact() {
-
-    }
 
     public Long getChatId() {
         return chatId;

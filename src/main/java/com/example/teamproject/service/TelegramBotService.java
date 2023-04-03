@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class TelegramBotService {
 
-//    @Autowired
-//    private final рпозиторий
-
     @Autowired
     private TelegramBot telegramBot;
 
