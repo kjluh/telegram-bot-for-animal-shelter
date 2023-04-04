@@ -89,23 +89,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                 telegramBot.execute(new SendMessage(chatId, "Вышлите фото животного"));
 
                         case "позвать волонтера" -> telegramBot.execute(new SendMessage(chatId, "Зовем волонтера"));
-                        case "записать данные" -> {
+                        case "записать данные" ->
                             telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Ваш вопрос."));
-                            Matcher matcher = TELEPHONE_MESSAGE.matcher(data);
-                            if (matcher.find()) {  //find запускает matcher
-                                try {
-                                    Integer telephone = Integer.valueOf(matcher.group(1)); // получаем телефон
-                                    String name = matcher.group(3); // получаем имя
-                                    String messageText = matcher.group(5); // получаем текст сообщения
-                                    userContactService.addUserContact(chatId,name,telephone/*messageText */); // создаем и пишем контакт в базу
-                                    SendMessage message = new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
-                                    telegramBot.execute(message);
-                                } catch (DateTimeParseException e) {
-                                    SendMessage messageEx = new SendMessage(chatId, "Некорректный формат номера телефона или сообщения");
-                                    telegramBot.execute(messageEx);
-                                }
-                            }
-                        }
+
 
                     }
                     return;
@@ -117,6 +103,21 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
                 if (update.message().text().equals("/start")) {  // этап 0
                     telegramBotService.firstMenu(chatId);
+                } else {
+                        Matcher matcher = TELEPHONE_MESSAGE.matcher(update.message().text());
+                        if (matcher.find()) {  //find запускает matcher
+                            try {
+                                String s = matcher.group(1); // получаем телефон
+                                String name = matcher.group(3); // получаем имя
+                                String messageText = matcher.group(5); // получаем текст сообщения
+                                userContactService.addUserContact(chatId,name,Integer.parseInt(s)/*messageText */); // создаем и пишем контакт в базу
+                                SendMessage message = new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
+                                telegramBot.execute(message);
+                            } catch (DateTimeParseException e) {
+                                SendMessage messageEx = new SendMessage(chatId, "Некорректный формат номера телефона или сообщения");
+                                telegramBot.execute(messageEx);
+                            }
+                        }
                 }
 
             });

@@ -13,6 +13,5 @@ public class UserContactServiceImpl implements UserContactService{
 
     public void addUserContact(Long chatId, String name, int phoneNumber) {
         repository.save(new UserContact(chatId, name, phoneNumber));
-
     }
 }
