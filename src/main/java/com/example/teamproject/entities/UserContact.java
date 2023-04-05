@@ -14,14 +14,6 @@ public class UserContact {
     private String name;
     private int phoneNumber;
 
-    public UserContact(Long chatId, String name, int phoneNumber) {
-        this.chatId = chatId;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-    }
-
-    public UserContact() {
-    }
 
     public Long getChatId() {
         return chatId;
@@ -47,9 +39,6 @@ public class UserContact {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getId() {
         return id;
