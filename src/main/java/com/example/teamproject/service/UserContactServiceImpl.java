@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserContactServiceImpl implements UserContactService{
+public class UserContactServiceImpl{
 
     @Autowired
     private UserContactRepository repository;
 
-    public void addUserContact(Long chatId, String name, int phoneNumber) {
-        repository.save(new UserContact(chatId, name, phoneNumber));
+    public void addUserContact(Long chatId, String name, String phoneNumber) {
+        UserContact userContact = new UserContact();
+        userContact.setChatId(chatId);
+        userContact.setName(name);
+        userContact.setPhoneNumber(Integer.parseInt(phoneNumber));
+        repository.save(userContact);
     }
 }
