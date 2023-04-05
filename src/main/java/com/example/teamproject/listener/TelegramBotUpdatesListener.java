@@ -90,8 +90,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case "позвать волонтера" -> telegramBot.execute(new SendMessage(chatId, "Зовем волонтера"));
                         case "записать данные" ->
                             telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
-
-
+                        case "Главное меню" -> telegramBotService.firstMenu(chatId);
                     }
                     return;
                 }
@@ -108,7 +107,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                 String s = matcher.group(1); // получаем телефон
                                 String name = matcher.group(3); // получаем имя
                                 String messageText = matcher.group(5); // получаем текст сообщения
-                                userContactService.addUserContact(chatId,name,s); // создаем и пишем контакт в базу
+//                                userContactService.addUserContact(chatId,name,s); // создаем и пишем контакт в базу
                                 SendMessage message = new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
                                 telegramBot.execute(message);
                             } catch (RuntimeException e) {

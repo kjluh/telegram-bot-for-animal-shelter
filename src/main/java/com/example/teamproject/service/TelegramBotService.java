@@ -13,6 +13,10 @@ public class TelegramBotService {
     @Autowired
     private TelegramBot telegramBot;
 
+    /**
+     *
+     * @return
+     */
     public InlineKeyboardButton saveInfo(){  // метод записи данных
         InlineKeyboardButton button = new InlineKeyboardButton("записать данные");
         button.callbackData("записать данные");
@@ -51,6 +55,7 @@ public class TelegramBotService {
         keyboard.addRow(button9);
         keyboard.addRow(saveInfo());
         keyboard.addRow(helpVolunteers());
+        keyboard.addRow(mainMenu());
         message.replyMarkup(keyboard);
         telegramBot.execute(message);
     }
@@ -65,6 +70,7 @@ public class TelegramBotService {
         keyboard.addRow(button1);
         keyboard.addRow(button2);
         keyboard.addRow(helpVolunteers());
+        keyboard.addRow(mainMenu());
         message.replyMarkup(keyboard);
         telegramBot.execute(message);
     }
@@ -78,11 +84,9 @@ public class TelegramBotService {
         button2.callbackData("2");
         InlineKeyboardButton button3 = new InlineKeyboardButton("Прислать отчет о питомце");
         button3.callbackData("3");
-        InlineKeyboardButton button4 = new InlineKeyboardButton("Позвать волонтера");
-        button4.callbackData("позвать волонтера");
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
         keyboard.addRow(button1, button2);
-        keyboard.addRow(button3, button4);
+        keyboard.addRow(button3, helpVolunteers());
         helloMessage.replyMarkup(keyboard);
         telegramBot.execute(helloMessage);
     }
@@ -103,6 +107,7 @@ public class TelegramBotService {
         keyboard.addRow(button3);
         keyboard.addRow(saveInfo());
         keyboard.addRow(helpVolunteers());
+        keyboard.addRow(mainMenu());
         message.replyMarkup(keyboard);
         telegramBot.execute(message);
     }
@@ -110,6 +115,11 @@ public class TelegramBotService {
     public InlineKeyboardButton helpVolunteers(){ // метод позвать волонтера
         InlineKeyboardButton button = new InlineKeyboardButton("Позвать волонтера");
         button.callbackData("позвать волонтера");
+        return button;
+    }
+    public InlineKeyboardButton mainMenu(){ // // возврат в главное меню
+        InlineKeyboardButton button = new InlineKeyboardButton("Главное меню");
+        button.callbackData("Главное меню");
         return button;
     }
 
