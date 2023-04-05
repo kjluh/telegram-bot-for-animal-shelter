@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+import java.util.Objects;
+
 @Entity
 public class UserContact {
 
@@ -12,7 +14,8 @@ public class UserContact {
     private Long id;
     private Long chatId;
     private String name;
-    private int phoneNumber;
+    private Long phoneNumber;
+    private String message;
 
 
     public Long getChatId() {
@@ -31,16 +34,46 @@ public class UserContact {
         this.name = name;
     }
 
-    public int getPhoneNumber() {
+    public Long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-
     public Long getId() {
         return id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "UserContact{" +
+                "id=" + id +
+                ", chatId=" + chatId +
+                ", name='" + name + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserContact that = (UserContact) o;
+        return phoneNumber == that.phoneNumber && id.equals(that.id) && chatId.equals(that.chatId) && name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, chatId, name, phoneNumber);
     }
 }

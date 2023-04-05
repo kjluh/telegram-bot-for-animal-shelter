@@ -1,7 +1,7 @@
 package com.example.teamproject.listener;
 
 import com.example.teamproject.service.TelegramBotService;
-import com.example.teamproject.service.UserContactServiceImpl;
+import com.example.teamproject.service.UserContactService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
@@ -28,7 +28,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
    private TelegramBotService telegramBotService;
 
     @Autowired
-    private UserContactServiceImpl userContactService;
+    private UserContactService userContactService;
 
     private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
@@ -104,13 +104,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         Matcher matcher = TELEPHONE_MESSAGE.matcher(update.message().text());
                         if (matcher.find()) {  //find запускает matcher
                             try {
-                                String s = matcher.group(1); // получаем телефон
+                                String phoneNumber = matcher.group(1); // получаем телефон
                                 String name = matcher.group(3); // получаем имя
                                 String messageText = matcher.group(5); // получаем текст сообщения
-//                                userContactService.addUserContact(chatId,name,s); // создаем и пишем контакт в базу
+                                userContactService.addUserContact(chatId,name,messageText, phoneNumber); // создаем и пишем контакт в базу
                                 SendMessage message = new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
                                 telegramBot.execute(message);
                             } catch (RuntimeException e) {
+                                e.printStackTrace();
                                 SendMessage messageEx = new SendMessage(chatId, "Некорректный формат номера телефона или сообщения");
                                 telegramBot.execute(messageEx);
                             }
