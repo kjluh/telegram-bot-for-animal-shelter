@@ -11,6 +11,13 @@ public class UserContactService {
     @Autowired
     private UserContactRepository repository;
 
+    /**
+     * Метод сохранения запроса пользователя в БД
+     * @param chatId принимает id чата
+     * @param name принимает имя пользователя
+     * @param messageText принимает сообщение пользователя
+     * @param phoneNumber принимает номер телефона пользователя
+     */
     public void addUserContact(Long chatId, String name, String messageText, String phoneNumber) {
         UserContact userContact = new UserContact();
         userContact.setChatId(chatId);
