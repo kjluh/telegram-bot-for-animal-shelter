@@ -6,16 +6,26 @@ import com.example.teamproject.service.VolunteerService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
+import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
+import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.GetFileResponse;
 import jakarta.annotation.PostConstruct;
+import liquibase.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +36,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private TelegramBot telegramBot;
 
     @Autowired
-   private TelegramBotService telegramBotService;
+    private TelegramBotService telegramBotService;
 
     @Autowired
     private UserContactService userContactService;
@@ -46,6 +56,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
      */
     private static final Pattern TELEPHONE_MESSAGE = Pattern.compile(
             "(\\d{11})(\\s)([А-яA-z)]+)(\\s)([А-яA-z)\\s\\d]+)"); // парсим сообщение на группы по круглым скобкам
+
     @Override
     public int process(List<Update> updates) {
         try {
@@ -100,7 +111,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
                         case "позвать волонтера" -> volunteerService.sendMessageVolunteer(chatId);
                         case "записать данные" ->
-                            telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
+                                telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
                         case "Главное меню" -> telegramBotService.firstMenu(chatId);
                     }
                     return;
@@ -112,26 +123,29 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 Long chatId = user.id();
 
                 /**
-                 * Обработка сообщения от пользователя
+                 * Обработка сообщения от пользователя и вызов основного меню
                  */
-                if (update.message().text().equals("/start")) {  // этап 0
+                if ("/start".equals(update.message().text())) {  // этап 0
                     telegramBotService.firstMenu(chatId);
-                } else {
-                        Matcher matcher = TELEPHONE_MESSAGE.matcher(update.message().text());
-                        if (matcher.find()) {  //find запускает matcher
-                            try {
-                                String phoneNumber = matcher.group(1); // получаем телефон
-                                String name = matcher.group(3); // получаем имя
-                                String messageText = matcher.group(5); // получаем текст сообщения
-                                userContactService.addUserContact(chatId,name,messageText, phoneNumber); // создаем и пишем контакт в базу
-                                SendMessage message = new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
-                                telegramBot.execute(message);
-                            } catch (RuntimeException e) {
-                                e.printStackTrace();
-                                SendMessage messageEx = new SendMessage(chatId, "Некорректный формат номера телефона или сообщения");
-                                telegramBot.execute(messageEx);
-                            }
-                        }
+
+
+                }
+                /**
+                 * Проверяем что пришло фото и загружаем на комп
+                 */
+                else if (update.message().photo() != null) { // проверяем что пришло фото
+                    userContactService.savePhoto(update);
+
+                }
+                /**
+                 * Проверяем сообщение пользователя на соответствие и сохраняем в БД,
+                 * или выдаем информацию о несоответствии шаблону для сохранения.
+                 */
+                else if (update.message().text() != null) {
+                    Matcher matcher = TELEPHONE_MESSAGE.matcher(update.message().text());
+                    if (matcher.find()) {  //find запускает matcher
+                        userContactService.saveInfoDataBase(matcher, chatId);
+                    }
                 }
 
             });
