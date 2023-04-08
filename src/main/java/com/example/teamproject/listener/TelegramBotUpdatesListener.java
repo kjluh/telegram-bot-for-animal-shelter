@@ -40,6 +40,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     public void init() {
         telegramBot.setUpdatesListener(this);
     }
+
+    /**
+     * Pattern для обработки сообщения от пользователя типа "89001122333 Имя вопрос"
+     */
     private static final Pattern TELEPHONE_MESSAGE = Pattern.compile(
             "(\\d{11})(\\s)([А-яA-z)]+)(\\s)([А-яA-z)\\s\\d]+)"); // парсим сообщение на группы по круглым скобкам
     @Override
