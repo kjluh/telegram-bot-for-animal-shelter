@@ -2,6 +2,7 @@ package com.example.teamproject.listener;
 
 import com.example.teamproject.service.TelegramBotService;
 import com.example.teamproject.service.UserContactService;
+import com.example.teamproject.service.VolunteerService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
@@ -30,6 +31,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Autowired
     private UserContactService userContactService;
 
+    @Autowired
+    private VolunteerService volunteerService;
+
     private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
     @PostConstruct
@@ -44,6 +48,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             updates.forEach(update -> {
                 logger.info("Processing update: {}", update);
 
+                /**
+                 * Отображение клавиатуры для пользователя с последующей обработкой кнопок
+                 */
                 if (update.callbackQuery() != null) {  // обработка этапа 0
                     Long chatId = update.callbackQuery().message().chat().id();
                     CallbackQuery callbackQuery = update.callbackQuery();
@@ -87,17 +94,22 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case "принимаем отчет" ->
                                 telegramBot.execute(new SendMessage(chatId, "Вышлите фото животного"));
 
-                        case "позвать волонтера" -> telegramBot.execute(new SendMessage(chatId, "Зовем волонтера"));
+                        case "позвать волонтера" -> volunteerService.sendMessageVolunteer(chatId);
                         case "записать данные" ->
                             telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
                         case "Главное меню" -> telegramBotService.firstMenu(chatId);
                     }
                     return;
                 }
-
+                /**
+                 * Создание и получение данных о пользователе из чата.
+                 */
                 User user = update.message().from();
                 Long chatId = user.id();
 
+                /**
+                 * Обработка сообщения от пользователя
+                 */
                 if (update.message().text().equals("/start")) {  // этап 0
                     telegramBotService.firstMenu(chatId);
                 } else {

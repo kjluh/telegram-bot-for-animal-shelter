@@ -6,15 +6,38 @@ import jakarta.persistence.Id;
 
 import java.util.Objects;
 
+/**
+ * Сущность для создания сообщения от пользователя и последующим хранением в бд
+ * В классе несколько параметров: id, chatId, name, phoneNumber, message  и стандартные геттеры, сеттеры,
+ * equals и hashCode.
+ */
 @Entity
 public class UserContact {
-
+    /**
+     * Уникальный ID для хранения класса в БД и использования экземпляра в программе
+     */
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     private Long id;
+
+    /**
+     * ID чата от куда пришел пользователь
+     */
     private Long chatId;
+
+    /**
+     * Имя пользователя
+     */
     private String name;
+
+    /**
+     * Номер телефона пользователя
+     */
     private Long phoneNumber;
+
+    /**
+     * Сообщение от пользователя
+     */
     private String message;
 
 

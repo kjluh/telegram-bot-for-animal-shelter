@@ -14,15 +14,21 @@ public class TelegramBotService {
     private TelegramBot telegramBot;
 
     /**
-     *
-     * @return
+     * Метод показывает пользователю кнопу "записать данные" в чате бота, использует {@link InlineKeyboardButton}
+     * @return возвращает созданную кнопку
      */
-    public InlineKeyboardButton saveInfo(){  // метод записи данных
+    public InlineKeyboardButton saveInfo() {  // метод записи данных
         InlineKeyboardButton button = new InlineKeyboardButton("записать данные");
         button.callbackData("записать данные");
         return button;
     }
-    public void takeDogFromShelter(Long chatId){  // кнопки этапа 2, кейсы между 2 и 3
+
+    /**
+     * Метод приветствует пользователя.
+     * Затем показывает пользователю созданные кнопки 2-го этапа в чате с ботом, использует {@link InlineKeyboardButton}
+     * @param chatId принимает ID чата, где отобразит кнопки
+     */
+    public void takeDogFromShelter(Long chatId) {  // кнопки этапа 2, кейсы между 2 и 3
         SendMessage message = new SendMessage(chatId, "Приветствует в нашем приюте");
 
         InlineKeyboardButton button1 = new InlineKeyboardButton("Правила знакомства с собакой до того, как можно забрать ее из приюта.");
@@ -59,7 +65,13 @@ public class TelegramBotService {
         message.replyMarkup(keyboard);
         telegramBot.execute(message);
     }
-    public void sendReport(Long chatId){  // кнопки этапа 3, кейсы между 2 и 3
+
+    /**
+     * Метод приветствует пользователя.
+     * Затем показывает пользователю созданные кнопки 3-го этапа в чате с ботом, использует {@link InlineKeyboardButton}
+     * @param chatId принимает ID чата, где отобразит кнопки
+     */
+    public void sendReport(Long chatId) {  // кнопки этапа 3, кейсы между 2 и 3
         SendMessage message = new SendMessage(chatId, "Приветствует в нашем приюте");
 
         InlineKeyboardButton button1 = new InlineKeyboardButton("Форма ежедневного отчёта");
@@ -75,7 +87,12 @@ public class TelegramBotService {
         telegramBot.execute(message);
     }
 
-    public void firstMenu(Long chatId){ // меню начальное, кейсы 1/2/3
+    /**
+     * Метод приветствует пользователя.
+     * Затем показывает пользователю начальное меню, использует {@link InlineKeyboardButton}
+     * @param chatId принимает ID чата, где отобразит кнопки
+     */
+    public void firstMenu(Long chatId) { // меню начальное, кейсы 1/2/3
         SendMessage helloMessage = new SendMessage(chatId, "Привет,  тут должна быть информация о боте. Выберите интересующий пункт из меню: ");
 
         InlineKeyboardButton button1 = new InlineKeyboardButton("Узнать информацию о приюте!");
@@ -91,6 +108,11 @@ public class TelegramBotService {
         telegramBot.execute(helloMessage);
     }
 
+    /**
+     * Метод приветствует пользователя.
+     * Затем показывает пользователю созданные кнопки 3-го этапа в чате с ботом, использует {@link InlineKeyboardButton}
+     * @param chatId принимает ID чата, где отобразит кнопки
+     */
     public void shelterInfo(Long chatId) { // кнопки этапа 1, кейсы между 1 и 2
 
         SendMessage message = new SendMessage(chatId, "Приветствует в нашем приюте");
@@ -112,12 +134,22 @@ public class TelegramBotService {
         telegramBot.execute(message);
     }
 
-    public InlineKeyboardButton helpVolunteers(){ // метод позвать волонтера
+    /**
+     * Метод показывает пользователю кнопу "Позвать волонтера" в чате бота, использует {@link InlineKeyboardButton}
+     * @return возвращает созданную кнопку
+     */
+    public InlineKeyboardButton helpVolunteers() { // метод позвать волонтера
         InlineKeyboardButton button = new InlineKeyboardButton("Позвать волонтера");
         button.callbackData("позвать волонтера");
         return button;
     }
-    public InlineKeyboardButton mainMenu(){ // // возврат в главное меню
+
+    /**
+     * Метод показывает пользователю кнопу "Главное меню" для возврата в основное меню в чате бота,
+     * использует {@link InlineKeyboardButton}
+     * @return возвращает созданную кнопку
+     */
+    public InlineKeyboardButton mainMenu() { // // возврат в главное меню
         InlineKeyboardButton button = new InlineKeyboardButton("Главное меню");
         button.callbackData("Главное меню");
         return button;
