@@ -1,23 +1,22 @@
 package com.example.teamproject.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.Collection;
 import java.util.Objects;
 
 /**
  * Сущность для создания сообщения от пользователя и последующим хранением в бд
- * В классе несколько параметров: id, chatId, name, phoneNumber, message  и стандартные геттеры, сеттеры,
+ * В классе несколько параметров: id, chatId, name, phoneNumber, message и стандартные геттеры, сеттеры,
  * equals и hashCode.
  */
 @Entity
-public class UserContact {
+public class AdoptiveParent {
     /**
      * Уникальный ID для хранения класса в БД и использования экземпляра в программе
      */
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
@@ -36,9 +35,17 @@ public class UserContact {
     private Long phoneNumber;
 
     /**
+     * Адрес пользователя
+     */
+    private String address;
+
+    /**
      * Сообщение от пользователя
      */
     private String message;
+
+    @OneToMany(mappedBy = "adoptiveParent")
+    private Collection<Report> reports;
 
 
     public Long getChatId() {
@@ -65,6 +72,14 @@ public class UserContact {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Long getId() {
         return id;
     }
@@ -79,7 +94,7 @@ public class UserContact {
 
     @Override
     public String toString() {
-        return "UserContact{" +
+        return "AdoptiveParent{" +
                 "id=" + id +
                 ", chatId=" + chatId +
                 ", name='" + name + '\'' +
@@ -91,7 +106,7 @@ public class UserContact {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserContact that = (UserContact) o;
+        AdoptiveParent that = (AdoptiveParent) o;
         return phoneNumber == that.phoneNumber && id.equals(that.id) && chatId.equals(that.chatId) && name.equals(that.name);
     }
 

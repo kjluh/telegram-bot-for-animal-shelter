@@ -1,31 +1,21 @@
 package com.example.teamproject.listener;
 
 import com.example.teamproject.service.TelegramBotService;
-import com.example.teamproject.service.UserContactService;
+import com.example.teamproject.service.AdoptiveParentService;
 import com.example.teamproject.service.VolunteerService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
-import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.GetFileResponse;
 import jakarta.annotation.PostConstruct;
-import liquibase.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +29,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private TelegramBotService telegramBotService;
 
     @Autowired
-    private UserContactService userContactService;
+    private AdoptiveParentService adoptiveParentService;
 
     @Autowired
     private VolunteerService volunteerService;
@@ -134,7 +124,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  * Проверяем что пришло фото и загружаем на комп
                  */
                 else if (update.message().photo() != null) { // проверяем что пришло фото
-                    userContactService.savePhoto(update);
+                    adoptiveParentService.savePhoto(update);
 
                 }
                 /**
@@ -144,7 +134,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 else if (update.message().text() != null) {
                     Matcher matcher = TELEPHONE_MESSAGE.matcher(update.message().text());
                     if (matcher.find()) {  //find запускает matcher
-                        userContactService.saveInfoDataBase(matcher, chatId);
+                        adoptiveParentService.saveInfoDataBase(matcher, chatId);
                     }
                 }
 
