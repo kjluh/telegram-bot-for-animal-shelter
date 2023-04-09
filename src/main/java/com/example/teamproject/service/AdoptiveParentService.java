@@ -1,7 +1,7 @@
 package com.example.teamproject.service;
 
-import com.example.teamproject.entities.UserContact;
-import com.example.teamproject.repositories.UserContactRepository;
+import com.example.teamproject.entities.AdoptiveParent;
+import com.example.teamproject.repositories.AdoptiveParentRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
@@ -20,13 +20,13 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 
 @Service
-public class UserContactService {
+public class AdoptiveParentService {
 
     @Autowired
     private TelegramBot telegramBot;
 
     @Autowired
-    private UserContactRepository repository;
+    private AdoptiveParentRepository repository;
 
     /**
      * Метод сохранения запроса пользователя в БД использует метод {@link JpaRepository#save(Object)}
@@ -37,12 +37,12 @@ public class UserContactService {
      * @param phoneNumber принимает номер телефона пользователя
      */
     public void addUserContact(Long chatId, String name, String messageText, String phoneNumber) {
-        UserContact userContact = new UserContact();
-        userContact.setChatId(chatId);
-        userContact.setName(name);
-        userContact.setMessage(messageText);
-        userContact.setPhoneNumber(Long.parseLong(phoneNumber));
-        repository.save(userContact);
+        AdoptiveParent adoptiveParent = new AdoptiveParent();
+        adoptiveParent.setChatId(chatId);
+        adoptiveParent.setName(name);
+        adoptiveParent.setMessage(messageText);
+        adoptiveParent.setPhoneNumber(Long.parseLong(phoneNumber));
+        repository.save(adoptiveParent);
     }
 
     public void saveInfoDataBase(Matcher matcher, Long chatId) {
