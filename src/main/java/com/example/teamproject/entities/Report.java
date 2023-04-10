@@ -27,6 +27,9 @@ public class Report {
     @JoinColumn(name = "parent_id")
     private AdoptiveParent adoptiveParent;
 
+    /**
+     * Животное, отчет которого присылается
+     */
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
