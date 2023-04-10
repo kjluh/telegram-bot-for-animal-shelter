@@ -20,13 +20,16 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Владелец животного
+     */
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private AdoptiveParent adoptiveParent;
 
-//    @ManyToOne
-//    @JoinColumn(name = "pet_id")
-//    private Pet pet;
+    @ManyToOne
+    @JoinColumn(name = "pet_id")
+    private Pet pet;
 
     /**
      * Фото животного в отчёте
