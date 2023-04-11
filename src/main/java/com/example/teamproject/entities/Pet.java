@@ -6,20 +6,38 @@ import java.util.Objects;
 
 @Entity
 public class Pet {
+    /**
+     * Уникальный ID для хранения класса в БД и использования экземпляра в программе
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Владелец питомца
+     */
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private AdoptiveParent adoptiveParent;
 
+    /**
+     * Тип питомца
+     */
     private String type;
 
+    /**
+     * Имя питомца
+     */
     private String name;
 
+    /**
+     * Возраст питомца
+     */
     private int age;
 
+    /**
+     * Описание питомца
+     */
     private String description;
 
     public Long getId() {

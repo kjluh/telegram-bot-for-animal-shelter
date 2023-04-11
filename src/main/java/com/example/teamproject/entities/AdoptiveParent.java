@@ -44,6 +44,9 @@ public class AdoptiveParent {
      */
     private String message;
 
+    /**
+     * Отчеты от пользователя по питомцу
+     */
     @OneToMany(mappedBy = "adoptiveParent")
     private Collection<Report> reports;
 
