@@ -107,6 +107,22 @@ public class Report {
         this.reportDate = reportDate;
     }
 
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+    public AdoptiveParent getAdoptiveParent() {
+        return adoptiveParent;
+    }
+
+    public void setAdoptiveParent(AdoptiveParent adoptiveParent) {
+        this.adoptiveParent = adoptiveParent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
