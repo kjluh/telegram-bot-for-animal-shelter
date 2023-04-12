@@ -50,6 +50,11 @@ public class AdoptiveParent {
     @OneToMany(mappedBy = "adoptiveParent")
     private Collection<Report> reports;
 
+    /**
+     * Список питомцев
+     */
+    @OneToMany(mappedBy = "adoptiveParent")
+    private Collection<Pet> pets;
 
     public Long getChatId() {
         return chatId;
@@ -93,6 +98,22 @@ public class AdoptiveParent {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Collection<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(Collection<Report> reports) {
+        this.reports = reports;
+    }
+
+    public Collection<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(Collection<Pet> pets) {
+        this.pets = pets;
     }
 
     @Override

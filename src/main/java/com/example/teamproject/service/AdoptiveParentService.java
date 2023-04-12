@@ -1,6 +1,7 @@
 package com.example.teamproject.service;
 
 import com.example.teamproject.entities.AdoptiveParent;
+import com.example.teamproject.entities.Pet;
 import com.example.teamproject.repositories.AdoptiveParentRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.PhotoSize;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.regex.Matcher;
 
@@ -27,6 +29,9 @@ public class AdoptiveParentService {
 
     @Autowired
     private AdoptiveParentRepository repository;
+
+    @Autowired
+    private PetService petService;
 
     /**
      * Метод сохранения запроса пользователя в БД использует метод {@link JpaRepository#save(Object)}
@@ -45,6 +50,20 @@ public class AdoptiveParentService {
         repository.save(adoptiveParent);
     }
 
+    /**
+     * Получить усыновителя со всеми питомцами
+     * В работе использует метод findAllWhereParenId() из сервиса PetService
+     *
+     * @param chatId
+     * @return AdoptiveParent
+     */
+    public AdoptiveParent findAdoptiveParentByChatId(Long chatId) {
+        AdoptiveParent adoptiveParent = repository.findByChatId(chatId);
+//        Collection<Pet> pets = petService.getPetsByParentId(adoptiveParent.getId());
+//        adoptiveParent.setPets(pets);
+        return adoptiveParent;
+    }
+
     public void saveInfoDataBase(Matcher matcher, Long chatId) {
         try {
             String phoneNumber = matcher.group(1); // получаем телефон
@@ -60,18 +79,4 @@ public class AdoptiveParentService {
         }
     }
 
-    public void savePhoto(Update update){
-        PhotoSize photoSize = update.message().photo()[update.message().photo().length - 1]; // из массива фото берем последнее в качестве
-        GetFileResponse getFileResponse = telegramBot.execute(
-                new GetFile(photoSize.fileId()));  // получение файла в чате
-        if (getFileResponse.isOk()) { // если ответ на получение файла положительный
-            try {
-                String extension = StringUtils.getFilenameExtension(getFileResponse.file().filePath());  // получаем расширение файла
-                byte[] image = telegramBot.getFileContent(getFileResponse.file()); // получаем картинку в виде массива байт
-                Files.write(Paths.get(UUID.randomUUID() + "." + extension), image); // сохраняем картинку на комп
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 }

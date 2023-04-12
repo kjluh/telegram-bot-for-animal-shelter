@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
 
-public interface PetRepository extends JpaRepository<Pet,Long> {
+public interface PetRepository extends JpaRepository<Pet, Long> {
 
-    public Collection<Pet> findByNameIgnoreCase(String name);
+    Collection<Pet> findByNameIgnoreCase(String name);
 
+//    Collection<Pet> findAllByParentId(Long id);
 }

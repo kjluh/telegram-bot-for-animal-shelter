@@ -1,5 +1,6 @@
 package com.example.teamproject.listener;
 
+import com.example.teamproject.service.ReportService;
 import com.example.teamproject.service.TelegramBotService;
 import com.example.teamproject.service.AdoptiveParentService;
 import com.example.teamproject.service.VolunteerService;
@@ -30,6 +31,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     @Autowired
     private AdoptiveParentService adoptiveParentService;
+
+    @Autowired
+    private ReportService reportService;
 
     @Autowired
     private VolunteerService volunteerService;
@@ -124,7 +128,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  * Проверяем что пришло фото и загружаем на комп
                  */
                 else if (update.message().photo() != null) { // проверяем что пришло фото
-                    adoptiveParentService.savePhoto(update);
+                    reportService.savePhoto(update);
 
                 }
                 /**
