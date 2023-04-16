@@ -45,6 +45,11 @@ public class AdoptiveParentService {
         repository.save(adoptiveParent);
     }
 
+    /**
+     * Метод Получения данных из сообщения пользователя для соранеия в БД
+     * @param matcher Сообщение пользователя
+     * @param chatId ID чата
+     */
     public void saveInfoDataBase(Matcher matcher, Long chatId) {
         try {
             String phoneNumber = matcher.group(1); // получаем телефон
@@ -60,6 +65,10 @@ public class AdoptiveParentService {
         }
     }
 
+    /**
+     * Метод загрузки изображения из чата на ПК с получением ID фото
+     * @param update обновленный чат с фото
+     */
     public void savePhoto(Update update){
         PhotoSize photoSize = update.message().photo()[update.message().photo().length - 1]; // из массива фото берем последнее в качестве
         GetFileResponse getFileResponse = telegramBot.execute(

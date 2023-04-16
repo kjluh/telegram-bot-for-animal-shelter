@@ -31,12 +31,3 @@ CREATE TABLE pet (
                         age int,
                         description text
 );
-
---changeSet anatoliy:4
-INSERT INTO pet VALUES ('1',null, 'cat', 'тузик', 12, 'домашний котик');
-INSERT INTO pet VALUES ('2',null, 'cat', 'мурзик', 12, 'домашний котик');
-INSERT INTO pet VALUES ('3',null, 'dog', 'шарик', 12, 'домашний пес');
-INSERT INTO pet VALUES ('4',null, 'dog', 'чара', 12, 'домашняя собака');
-INSERT INTO pet VALUES ('5',null, 'cat', 'бегемот', 12, 'домашний котик');
-
-
