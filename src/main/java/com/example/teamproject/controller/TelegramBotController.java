@@ -17,7 +17,6 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/teamProject8")
 public class TelegramBotController {
-    //http://localhost:8080/teamProject8/get_all_pet
     private final PetService petService;
 
     public TelegramBotController(PetService petService) {
@@ -43,7 +42,7 @@ public class TelegramBotController {
                     )
             }
     )
-    @PostMapping("/load_pet")
+    @PostMapping()
     public Pet loadPet(@Parameter(description = "Передаем питомца") @RequestBody Pet pet) {
         return petService.loadPet(pet);
     }
@@ -66,7 +65,7 @@ public class TelegramBotController {
                     )
             }
     )
-    @GetMapping("/get_all_pet")
+    @GetMapping()
     public Collection<Pet> getAllPet() {
         return petService.getAllPet();
     }
@@ -88,7 +87,7 @@ public class TelegramBotController {
                     )
             }
     )
-    @GetMapping("/get_pet")
+    @GetMapping("/")
     public Collection<Pet> getPet(@Parameter(description = "кличка питомца") @RequestParam String name) {
         return petService.getPet(name);
     }
@@ -112,7 +111,7 @@ public class TelegramBotController {
                     )
             }
     )
-    @DeleteMapping("/{id}/delete_pet")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Pet> deletePet(@Parameter(description = "id питомца") @PathVariable Long id) {
         Pet pet = petService.getPetById(id);
         if (pet != null) {
