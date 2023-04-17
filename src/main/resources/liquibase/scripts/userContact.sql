@@ -39,4 +39,8 @@ INSERT INTO pet VALUES ('3',null, 'dog', 'шарик', 12, 'домашний п�
 INSERT INTO pet VALUES ('4',null, 'dog', 'чара', 12, 'домашняя собака');
 INSERT INTO pet VALUES ('5',null, 'cat', 'бегемот', 12, 'домашний котик');
 
-
+--changeSet konstantin:5
+INSERT INTO adoptive_parent VALUES ('1', 641625801, 'Jack', 89109999999, 'London, Queen st. 10', 'i wanna котик');
+INSERT INTO pet VALUES ('6', 1, 'cat', 'тузик', 12, 'домашний котик');
+INSERT INTO pet VALUES ('7', 1, 'cat', 'мурзик', 12, 'домашний котик');
+INSERT INTO pet VALUES ('8', 1, 'dog', 'шарик', 12, 'домашний пес');

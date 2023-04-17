@@ -51,8 +51,7 @@ public class AdoptiveParentService {
     }
 
     /**
-     * Получить усыновителя со всеми питомцами
-     * В работе использует метод findAllWhereParenId() из сервиса PetService
+     * Получить усыновителя со всеми питомцами по chatId
      *
      * @param chatId
      * @return AdoptiveParent
@@ -62,6 +61,16 @@ public class AdoptiveParentService {
 //        Collection<Pet> pets = petService.getPetsByParentId(adoptiveParent.getId());
 //        adoptiveParent.setPets(pets);
         return adoptiveParent;
+    }
+
+    /**
+     * Получить усыновителя со всеми питомцами по id
+     *
+     * @param id
+     * @return AdoptiveParent
+     */
+    public AdoptiveParent findAdoptiveParentById(Long id) {
+        return repository.findById(id).get();
     }
 
     public void saveInfoDataBase(Matcher matcher, Long chatId) {
