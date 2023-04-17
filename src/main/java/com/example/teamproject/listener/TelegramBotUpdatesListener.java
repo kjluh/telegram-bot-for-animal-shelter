@@ -103,7 +103,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case "принимаем отчет" ->
                                 telegramBot.execute(new SendMessage(chatId, "Вышлите фото животного"));
 
-                        case "позвать волонтера" -> volunteerService.sendMessageVolunteer(chatId);
+                        case "позвать волонтера" ->
+                                volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username());
                         case "записать данные" ->
                                 telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
                         case "Главное меню" -> telegramBotService.firstMenu(chatId);

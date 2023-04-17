@@ -1,6 +1,7 @@
 package com.example.teamproject.service;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,10 @@ public class VolunteerService {
 
     /**
      * Метод пригласить в текущий чат волонтера
-     * @param chatId id текущего клиента
+     *
+     * @param user имя текущего клиента текущего клиента
      */
-    public void sendMessageVolunteer(Long chatId){
-        telegramBot.execute(new SendMessage(chatId, "Вас просят присоединиться к чату " + volunteerChat));
+    public void sendMessageVolunteer(String user) {
+        telegramBot.execute(new SendMessage(volunteerChat, "Вас просят присоединиться к чату " + "@" + user));
     }
 }

@@ -25,7 +25,7 @@ public class TelegramBotController {
     }
 
     @Operation(
-            summary = "Загрузка питомца в базу приют",
+            summary = "Загрузка питомца в базу приюта",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -52,7 +52,7 @@ public class TelegramBotController {
     }
 
     @Operation(
-            summary = "Загрузка питомца в базу приют",
+            summary = "Загрузка питомца в базу приюта",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
