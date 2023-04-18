@@ -50,6 +50,9 @@ public class AdoptiveParent {
     @OneToMany(mappedBy = "adoptiveParent")
     private Collection<Report> reports;
 
+    @OneToMany(mappedBy = "id")
+    private Collection<Pet> pets;
+
 
     public Long getChatId() {
         return chatId;
@@ -95,14 +98,20 @@ public class AdoptiveParent {
         this.message = message;
     }
 
-    @Override
-    public String toString() {
-        return "AdoptiveParent{" +
-                "id=" + id +
-                ", chatId=" + chatId +
-                ", name='" + name + '\'' +
-                ", phoneNumber=" + phoneNumber +
-                '}';
+    public Collection<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(Collection<Report> reports) {
+        this.reports = reports;
+    }
+
+    public Collection<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(Collection<Pet> pets) {
+        this.pets = pets;
     }
 
     @Override
@@ -110,11 +119,25 @@ public class AdoptiveParent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AdoptiveParent that = (AdoptiveParent) o;
-        return phoneNumber == that.phoneNumber && id.equals(that.id) && chatId.equals(that.chatId) && name.equals(that.name);
+        return Objects.equals(id, that.id) && Objects.equals(chatId, that.chatId) && Objects.equals(name, that.name) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(address, that.address) && Objects.equals(message, that.message) && Objects.equals(reports, that.reports) && Objects.equals(pets, that.pets);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, chatId, name, phoneNumber);
+        return Objects.hash(id, chatId, name, phoneNumber, address, message, reports, pets);
+    }
+
+    @Override
+    public String toString() {
+        return "AdoptiveParent{" +
+                "id=" + id +
+                ", chatId=" + chatId +
+                ", name='" + name + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", address='" + address + '\'' +
+                ", message='" + message + '\'' +
+                ", reports=" + reports +
+                ", pets=" + pets +
+                '}';
     }
 }

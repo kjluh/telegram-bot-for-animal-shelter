@@ -44,6 +44,10 @@ public class Pet {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public AdoptiveParent getAdoptiveParent() {
         return adoptiveParent;
     }
@@ -100,7 +104,8 @@ public class Pet {
     @Override
     public String toString() {
         return "Pet{" +
-                "adoptiveParent=" + adoptiveParent +
+                "id=" + id +
+                ", adoptiveParent=" + adoptiveParent +
                 ", type='" + type + '\'' +
                 ", name='" + name + '\'' +
                 ", age=" + age +
