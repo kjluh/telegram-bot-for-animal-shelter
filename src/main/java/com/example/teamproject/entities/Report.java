@@ -3,7 +3,6 @@ package com.example.teamproject.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -37,7 +36,7 @@ public class Report {
     /**
      * Фото животного в отчёте
      */
-    private byte[] photo;
+    private Long photoId;
 
     /**
      * Диета животного
@@ -67,12 +66,12 @@ public class Report {
         return id;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    public Long getPhotoId() {
+        return photoId;
     }
 
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
+    public void setPhotoId(Long photoId) {
+        this.photoId = photoId;
     }
 
     public String getDiet() {
@@ -112,19 +111,19 @@ public class Report {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Report report = (Report) o;
-        return id.equals(report.id) && diet.equals(report.diet) && health.equals(report.health) && behavior.equals(report.behavior) && reportDate.equals(report.reportDate);
+        return Objects.equals(id, report.id) && Objects.equals(adoptiveParent, report.adoptiveParent) && Objects.equals(pet, report.pet) && Objects.equals(photoId, report.photoId) && Objects.equals(diet, report.diet) && Objects.equals(health, report.health) && Objects.equals(behavior, report.behavior) && Objects.equals(reportDate, report.reportDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, diet, health, behavior, reportDate);
+        return Objects.hash(id, adoptiveParent, pet, photoId, diet, health, behavior, reportDate);
     }
 
     @Override
     public String toString() {
         return "Report{" +
                 "id=" + id +
-                ", photo=" + Arrays.toString(photo) +
+                ", photo=" + photoId +
                 ", diet='" + diet + '\'' +
                 ", health='" + health + '\'' +
                 ", behavior='" + behavior + '\'' +
