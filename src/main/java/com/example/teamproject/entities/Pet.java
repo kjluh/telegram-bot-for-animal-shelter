@@ -16,7 +16,9 @@ public class Pet {
     /**
      * Владелец питомца
      */
-    private Long parentId;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private AdoptiveParent adoptiveParent;
 
     /**
      * Тип питомца
@@ -46,12 +48,12 @@ public class Pet {
         this.id = id;
     }
 
-    public Long getParentId() {
-        return parentId;
+    public AdoptiveParent getAdoptiveParent() {
+        return adoptiveParent;
     }
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
+    public void setAdoptiveParent(AdoptiveParent adoptiveParent) {
+        this.adoptiveParent = adoptiveParent;
     }
 
     public String getType() {
@@ -91,17 +93,19 @@ public class Pet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return age == pet.age && Objects.equals(id, pet.id) && Objects.equals(parentId, pet.parentId) && Objects.equals(type, pet.type) && Objects.equals(name, pet.name) && Objects.equals(description, pet.description);
+        return age == pet.age && Objects.equals(id, pet.id) && Objects.equals(adoptiveParent, pet.adoptiveParent) && Objects.equals(type, pet.type) && Objects.equals(name, pet.name) && Objects.equals(description, pet.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, parentId, type, name, age, description);
+        return Objects.hash(id, adoptiveParent, type, name, age, description);
     }
 
     @Override
     public String toString() {
         return "Pet{" +
+                "id=" + id +
+                ", adoptiveParent=" + adoptiveParent +
                 ", type='" + type + '\'' +
                 ", name='" + name + '\'' +
                 ", age=" + age +
