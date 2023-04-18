@@ -40,8 +40,4 @@ public class PetService {
         petRepository.deleteById(id);
         return pet;
     }
-//
-//    public Collection<Pet> getPetsByParentId(Long id) {
-//        return petRepository.findAllByParentId(id);
-//    }
 }

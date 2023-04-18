@@ -1,6 +1,8 @@
 package com.example.teamproject.controller;
 
+import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.Pet;
+import com.example.teamproject.service.AdoptiveParentService;
 import com.example.teamproject.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,8 +22,11 @@ public class TelegramBotController {
     //http://localhost:8080/teamProject8/get_all_pet
     private final PetService petService;
 
-    public TelegramBotController(PetService petService) {
+    private final AdoptiveParentService adoptiveParensService;
+
+    public TelegramBotController(PetService petService, AdoptiveParentService adoptiveParensService) {
         this.petService = petService;
+        this.adoptiveParensService = adoptiveParensService;
     }
 
     @Operation(
@@ -93,6 +98,11 @@ public class TelegramBotController {
     @GetMapping("/get_pet")
     public Collection<Pet> getPet(@Parameter(description = "кличка питомца") @RequestParam String name){
         return petService.getPet(name);
+    }
+
+    @GetMapping("/get_adoptive_parent")
+    public ResponseEntity<AdoptiveParent> getAdoptiveParent(@Parameter(description = "id усыновителя") @RequestParam Long id){
+        return ResponseEntity.ok(adoptiveParensService.findAdoptiveParentById(id));
     }
 
     @Operation(

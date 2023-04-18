@@ -58,8 +58,6 @@ public class AdoptiveParentService {
      */
     public AdoptiveParent findAdoptiveParentByChatId(Long chatId) {
         AdoptiveParent adoptiveParent = repository.findByChatId(chatId);
-//        Collection<Pet> pets = petService.getPetsByParentId(adoptiveParent.getId());
-//        adoptiveParent.setPets(pets);
         return adoptiveParent;
     }
 
