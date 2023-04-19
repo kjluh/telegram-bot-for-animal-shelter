@@ -50,11 +50,10 @@ public class AdoptiveParent {
     @OneToMany(mappedBy = "adoptiveParent")
     private Collection<Report> reports;
 
-    /**
-     * Список питомцев
-     */
-    @OneToMany(mappedBy = "adoptiveParent")
+    @OneToMany
+    @JoinColumn(name="adoptive_parent_id")
     private Collection<Pet> pets;
+
 
     public Long getChatId() {
         return chatId;
@@ -123,6 +122,10 @@ public class AdoptiveParent {
                 ", chatId=" + chatId +
                 ", name='" + name + '\'' +
                 ", phoneNumber=" + phoneNumber +
+                ", address='" + address + '\'' +
+                ", message='" + message + '\'' +
+                ", reports=" + reports +
+                ", pets=" + pets +
                 '}';
     }
 

@@ -1,5 +1,6 @@
 package com.example.teamproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -17,7 +18,7 @@ public class Pet {
      * Владелец питомца
      */
     @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private AdoptiveParent adoptiveParent;
 
     /**
@@ -42,6 +43,10 @@ public class Pet {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public AdoptiveParent getAdoptiveParent() {
@@ -100,7 +105,8 @@ public class Pet {
     @Override
     public String toString() {
         return "Pet{" +
-                "adoptiveParent=" + adoptiveParent +
+                "id=" + id +
+                ", adoptiveParent=" + adoptiveParent +
                 ", type='" + type + '\'' +
                 ", name='" + name + '\'' +
                 ", age=" + age +

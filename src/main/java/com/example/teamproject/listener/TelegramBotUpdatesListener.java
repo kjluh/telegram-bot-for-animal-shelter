@@ -50,6 +50,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
      */
     private static final Pattern TELEPHONE_MESSAGE = Pattern.compile(
             "(\\d{11})(\\s)([А-яA-z)]+)(\\s)([А-яA-z)\\s\\d]+)"); // парсим сообщение на группы по круглым скобкам
+    Long chatId;
 
     @Override
     public int process(List<Update> updates) {
@@ -61,9 +62,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  * Отображение клавиатуры для пользователя с последующей обработкой кнопок
                  */
                 if (update.callbackQuery() != null) {  // обработка этапа 0
-                    Long chatId = update.callbackQuery().message().chat().id();
-                    CallbackQuery callbackQuery = update.callbackQuery();
-                    String data = callbackQuery.data();
+                    chatId = update.callbackQuery().message().chat().id();
+                    String data = update.callbackQuery().data();
                     switch (data) {
 
                         case "1" -> telegramBotService.shelterInfo(chatId);
@@ -114,8 +114,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 /**
                  * Создание и получение данных о пользователе из чата.
                  */
-                User user = update.message().from();
-                Long chatId = user.id();
+                chatId = update.message().chat().id();
 
                 /**
                  * Обработка сообщения от пользователя и вызов основного меню
@@ -129,8 +128,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  * Проверяем что пришло фото и загружаем на комп
                  */
                 else if (update.message().photo() != null) { // проверяем что пришло фото
-                    reportService.savePhoto(update);
-
+                    adoptiveParentService.savePhoto(update);
                 }
                 /**
                  * Проверяем сообщение пользователя на соответствие и сохраняем в БД,

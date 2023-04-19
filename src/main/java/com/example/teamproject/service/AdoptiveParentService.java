@@ -86,4 +86,22 @@ public class AdoptiveParentService {
         }
     }
 
+    /**
+     * Метод загрузки изображения из чата на ПК с получением ID фото
+     * @param update обновленный чат с фото
+     */
+    public void savePhoto(Update update){
+        PhotoSize photoSize = update.message().photo()[update.message().photo().length - 1]; // из массива фото берем последнее в качестве
+        GetFileResponse getFileResponse = telegramBot.execute(
+                new GetFile(photoSize.fileId()));  // получение файла в чате
+        if (getFileResponse.isOk()) { // если ответ на получение файла положительный
+            try {
+                String extension = StringUtils.getFilenameExtension(getFileResponse.file().filePath());  // получаем расширение файла
+                byte[] image = telegramBot.getFileContent(getFileResponse.file()); // получаем картинку в виде массива байт
+                Files.write(Paths.get(UUID.randomUUID() + "." + extension), image); // сохраняем картинку на комп
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
