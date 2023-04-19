@@ -39,8 +39,8 @@ public class TelegramBotController {
                             )
                     ),
                     @ApiResponse(
-                            responseCode = "404",
-                            description = "Загрузка питомца не прошла",
+                            responseCode = "415",
+                            description = "Загрузка питомца не прошла, неверный формат",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE
                             )
