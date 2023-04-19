@@ -17,14 +17,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TeamProjectApplicationTests {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Test
-    void contextLoads(){
-    }
-
-    @Test
-    void testCreatePet() throws Exception{
+    void testCreatePet() throws Exception {
         JSONObject testJSONObject = new JSONObject();
         testJSONObject.put("name", "testCreatePet");
         testJSONObject.put("id", "1");
@@ -36,7 +32,7 @@ class TeamProjectApplicationTests {
                         post("/teamProject8").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
                 .andExpect(status().isOk());
         mockMvc.perform(
-                get("/teamProject8"))
+                        get("/teamProject8"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].name").value("testCreatePet"))
@@ -46,7 +42,16 @@ class TeamProjectApplicationTests {
     }
 
     @Test
-    void testGetPet() throws Exception{
+    void testCreatePetError() throws Exception {
+        JSONObject testJSONObject = new JSONObject();
+        mockMvc.
+                perform(
+                        post("/teamProject8").contentType(MediaType.ALL_VALUE).content("yfyiukbh"))
+                .andExpect(status().is(415));
+    }
+
+    @Test
+    void testGetPet() throws Exception {
         JSONObject testJSONObject = new JSONObject();
         testJSONObject.put("name", "testGetPet");
         testJSONObject.put("id", "1");
@@ -68,7 +73,14 @@ class TeamProjectApplicationTests {
     }
 
     @Test
-    void testDeletePet() throws Exception{
+    void testGetPetError() throws Exception {
+        mockMvc.perform(
+                        get("/teamProject8/?name=test"))
+                .andExpect(jsonPath("$.size()").value(0));
+    }
+
+    @Test
+    void testDeletePet() throws Exception {
         JSONObject testJSONObjectForDelete = new JSONObject();
         testJSONObjectForDelete.put("name", "testDeletePet");
         testJSONObjectForDelete.put("id", "1");
@@ -86,5 +98,20 @@ class TeamProjectApplicationTests {
                 .andExpect(jsonPath("$.type").value("test"))
                 .andExpect(jsonPath("$.age").value("11"))
                 .andExpect(jsonPath("$.description").value("description"));
+    }
+
+    @Test
+    void testDeletePetError() throws Exception {
+        JSONObject testJSONObjectForDelete = new JSONObject();
+        testJSONObjectForDelete.put("name", "testDeletePet");
+        testJSONObjectForDelete.put("id", "1");
+        testJSONObjectForDelete.put("type", "test");
+        testJSONObjectForDelete.put("age", "11");
+        testJSONObjectForDelete.put("description", "description");
+
+        mockMvc.perform(
+                        delete("/teamProject8/1"))
+                .andExpect(status().is(404));
+
     }
 }

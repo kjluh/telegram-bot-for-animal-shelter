@@ -36,7 +36,7 @@ public class AdoptiveParentService {
      * @param messageText принимает сообщение пользователя
      * @param phoneNumber принимает номер телефона пользователя
      */
-    public void addUserContact(Long chatId, String name, String messageText, String phoneNumber) {
+    private void addUserContact(Long chatId, String name, String messageText, String phoneNumber) {
         AdoptiveParent adoptiveParent = new AdoptiveParent();
         adoptiveParent.setChatId(chatId);
         adoptiveParent.setName(name);

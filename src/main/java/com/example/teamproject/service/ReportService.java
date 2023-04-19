@@ -18,7 +18,7 @@ public class ReportService {
 
     public Report loadReport(byte[] photo, String diet, String health, String behavior, LocalDate reportDate) {
         Report newReport = new Report();
-        newReport.setPhoto(photo);
+//        newReport.setPhoto(photo);
         newReport.setDiet(diet);
         newReport.setHealth(health);
         newReport.setBehavior(behavior);
