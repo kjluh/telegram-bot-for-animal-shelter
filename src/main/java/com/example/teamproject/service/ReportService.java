@@ -15,22 +15,28 @@ public class ReportService {
     public ReportService(ReportRepository reportRepository) {
         this.reportRepository = reportRepository;
     }
-
-    public Report loadReport(byte[] photo, String diet, String health, String behavior, LocalDate reportDate) {
-        Report newReport = new Report();
-//        newReport.setPhoto(photo);
-        newReport.setDiet(diet);
-        newReport.setHealth(health);
-        newReport.setBehavior(behavior);
-        newReport.setReportDate(reportDate);
+    /**
+     * Метод Загружает отчёт в БД
+     * @param newReport в формате JSON  клас Report
+     * @return возвращает загруженный отчёт
+     */
+    public Report loadReport(Report newReport) {
+        reportRepository.save(newReport);
         return newReport;
     }
-
+    /**
+     * Получаем список всех отчётов в приюте
+     * @return list объектов класса REPORT из БД
+     */
     public Collection<Report> getAllReports() {
         return reportRepository.findAll();
     }
 
-
+    /**
+     * Удаляем отчёт из БД
+     * @param id ID для удаления
+     * @return возвращаем удаленный отчёт
+     */
     public Report deleteReport(Long id) {
         Report report = reportRepository.findById(id).orElseThrow();
         reportRepository.deleteById(id);

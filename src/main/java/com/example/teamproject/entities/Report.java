@@ -36,7 +36,7 @@ public class Report {
     /**
      * Фото животного в отчёте
      */
-    private Long photoId;
+    private String photoId;
 
     /**
      * Диета животного
@@ -66,11 +66,11 @@ public class Report {
         return id;
     }
 
-    public Long getPhotoId() {
+    public String getPhotoId() {
         return photoId;
     }
 
-    public void setPhotoId(Long photoId) {
+    public void setPhotoId(String photoId) {
         this.photoId = photoId;
     }
 
