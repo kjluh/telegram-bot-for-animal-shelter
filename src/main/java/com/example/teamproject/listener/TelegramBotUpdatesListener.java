@@ -104,16 +104,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                 telegramBot.execute(new SendMessage(chatId, " тут должен быть список причин, почему могут отказать и не дать забрать собаку из приюта."));
 
                         case "3" -> telegramBotService.sendReport(chatId);
-                        case "Форма ежедневного отчёта" -> {
+                        case "Форма ежедневного отчёта" ->
                             telegramBot.execute(new SendMessage(chatId, "Форма ежедневного отчёта:\n1. Фото животного\n2. Рацион животного\n" +
                                     "3. Общее самочувствие и привыкание к новому месту \n4. Изменение в поведении"));
-                            telegramBotService.sendReport(chatId);
-                        }
-
                         case "принимаем отчет" -> {
                             telegramBot.execute(new SendMessage(chatId, "Вышлите фото животного"));
                             tempNumber = 1;
-
                         }
                         case "позвать волонтера" ->
                                 volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username());
