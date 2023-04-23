@@ -1,10 +1,7 @@
 package com.example.teamproject.listener;
 
 import com.example.teamproject.entities.Report;
-import com.example.teamproject.service.ReportService;
-import com.example.teamproject.service.TelegramBotService;
-import com.example.teamproject.service.AdoptiveParentService;
-import com.example.teamproject.service.VolunteerService;
+import com.example.teamproject.service.*;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.CallbackQuery;
@@ -40,6 +37,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private PetService petService;
 
     @Autowired
     private VolunteerService volunteerService;
@@ -108,7 +107,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             telegramBot.execute(new SendMessage(chatId, "Форма ежедневного отчёта:\n1. Фото животного\n2. Рацион животного\n" +
                                     "3. Общее самочувствие и привыкание к новому месту \n4. Изменение в поведении"));
                         case "принимаем отчет" -> {
-                            telegramBot.execute(new SendMessage(chatId, "Вышлите фото животного"));
+                            telegramBot.execute(new SendMessage(chatId, "Напишите Id животного, для которого составляется отчёт"));
                             tempNumber = 1;
                         }
                         case "позвать волонтера" ->
@@ -133,31 +132,32 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 /**
                  * Поэтапное сохранение ежедневного отчёта о питомце
                  */
-                else if (update.message().photo() != null && tempNumber == 1) { // проверяем что пришло фото
+                else if (tempNumber == 1) {
+                    tempReport.setPet(petService.getPetById(Long.valueOf(update.message().text())));
+                    tempReport.setAdoptiveParent(adoptiveParentService.findAdoptiveParentByChatId(chatId));
+                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, вышлите фото животного"));
+                    tempNumber = 2;
+                }
+                else if (update.message().photo() != null && tempNumber == 2) { // проверяем что пришло фото
                     tempReport.setPhotoId((update.message().photo()[update.message().photo().length - 1]).fileId());
-                    logger.info("Работает");
                     logger.info("Id photo {} ", tempReport.getPhotoId());
                     telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите рацион животного"));
-                    tempNumber = 2;
-//                    adoptiveParentService.savePhoto(update);
-                }
-                else if (tempNumber == 2) {
-                    tempReport.setDiet(update.message().text());
-                    logger.info("Работает2");
-                    logger.info("Diet {} ", tempReport.getDiet());
-                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите общее самочувствие и привыкание к новому месту"));
                     tempNumber = 3;
                 }
                 else if (tempNumber == 3) {
-                    tempReport.setHealth(update.message().text());
-                    logger.info("Работает3");
-                    logger.info("Health {} ", tempReport.getHealth());
-                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите изменение в поведении: отказ от старых привычек, приобретение новых. Если такие имееются"));
+                    tempReport.setDiet(update.message().text());
+                    logger.info("Diet {} ", tempReport.getDiet());
+                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите общее самочувствие и привыкание к новому месту"));
                     tempNumber = 4;
                 }
                 else if (tempNumber == 4) {
+                    tempReport.setHealth(update.message().text());
+                    logger.info("Health {} ", tempReport.getHealth());
+                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите изменение в поведении: отказ от старых привычек, приобретение новых. Если такие имееются"));
+                    tempNumber = 5;
+                }
+                else if (tempNumber == 5) {
                     tempReport.setBehavior(update.message().text());
-                    logger.info("Работает4");
                     logger.info("Behavior {} ", tempReport.getBehavior());
                     telegramBot.execute(new SendMessage(chatId, "Спасибо, информации принята!"));
                     tempNumber = 0;
