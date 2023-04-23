@@ -33,7 +33,7 @@ public class VolunteerService {
      *
      * @param user имя текущего клиента текущего клиента
      */
-    public void sendMessageVolunteer(String user) {
-        telegramBot.execute(new SendMessage(volunteerChat, "Вас просят присоединиться к чату " + "@" + user));
+    public SendMessage sendMessageVolunteer(String user) {
+              return new SendMessage(volunteerChat, "Вас просят присоединиться к чату " + "@" + user);
     }
 }

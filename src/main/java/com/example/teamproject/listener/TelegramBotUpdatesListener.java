@@ -112,7 +112,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             tempNumber = 1;
                         }
                         case "позвать волонтера" ->
-                                volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username());
+                                telegramBot.execute(volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username()));
                         case "записать данные" ->
                                 telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
                         case "Главное меню" -> telegramBotService.firstMenu(chatId);
@@ -173,7 +173,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 else if (update.message().text() != null) {
                     Matcher matcher = TELEPHONE_MESSAGE.matcher(update.message().text());
                     if (matcher.find()) {  //find запускает matcher
-                        adoptiveParentService.saveInfoDataBase(matcher, chatId);
+                        telegramBot.execute(adoptiveParentService.saveInfoDataBase(matcher, chatId));
+                    } else {
+                        telegramBot.execute(new SendMessage(chatId, "Некорректный формат номера телефона или сообщения"));
                     }
                 }
 

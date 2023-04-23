@@ -77,18 +77,11 @@ public class AdoptiveParentService {
      * @param matcher фильтр сообщения
      * @param chatId
      */
-    public void saveInfoDataBase(Matcher matcher, Long chatId) {
-        try {
+    public SendMessage saveInfoDataBase(Matcher matcher, Long chatId) {
             String phoneNumber = matcher.group(1); // получаем телефон
             String name = matcher.group(3); // получаем имя
             String messageText = matcher.group(5); // получаем текст сообщения
             addUserContact(chatId, name, messageText, phoneNumber); // создаем и пишем контакт в базу
-            SendMessage message = new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
-            telegramBot.execute(message);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            SendMessage messageEx = new SendMessage(chatId, "Некорректный формат номера телефона или сообщения");
-            telegramBot.execute(messageEx);
-        }
+          return new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
     }
 }
