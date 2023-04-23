@@ -140,7 +140,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  * Поэтапное сохранение ежедневного отчёта о питомце
                  */
                 else if (update.message().photo() != null && tempNumber == 1) { // проверяем что пришло фото
-                    tempReport.setPhotoId(Objects.requireNonNull(Arrays.stream(update.message().photo()).sorted(Comparator.comparing(PhotoSize::fileSize).reversed()).findFirst().orElse(null)).fileId());
+                    tempReport.setPhotoId((update.message().photo()[update.message().photo().length - 1]).fileId());
                     logger.info("Работает");
                     logger.info("Id photo {} ", tempReport.getPhotoId());
                     telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите рацион животного"));

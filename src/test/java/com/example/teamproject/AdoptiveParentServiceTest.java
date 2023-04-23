@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -31,7 +32,7 @@ public class AdoptiveParentServiceTest {
     @Autowired
     private TelegramBotUpdatesListener telegramBotUpdatesListener;
 
-    @Autowired
+    @MockBean
     TelegramBot telegramBot;
 
 

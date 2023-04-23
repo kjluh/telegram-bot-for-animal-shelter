@@ -1,7 +1,6 @@
 package com.example.teamproject;
 
 import com.example.teamproject.listener.TelegramBotUpdatesListener;
-import com.example.teamproject.service.VolunteerService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
