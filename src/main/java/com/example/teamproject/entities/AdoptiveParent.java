@@ -2,6 +2,7 @@ package com.example.teamproject.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -50,10 +51,22 @@ public class AdoptiveParent {
     @OneToMany(mappedBy = "adoptiveParent")
     private Collection<Report> reports;
 
+    /**
+     * Список всех животных одного хозяина
+     */
     @OneToMany
     @JoinColumn(name="adoptive_parent_id")
     private Collection<Pet> pets;
 
+    private LocalDate trialPeriod;
+
+    public LocalDate getTrialPeriod() {
+        return trialPeriod;
+    }
+
+    public void setTrialPeriod(LocalDate trialPeriod) {
+        this.trialPeriod = trialPeriod;
+    }
 
     public Long getChatId() {
         return chatId;

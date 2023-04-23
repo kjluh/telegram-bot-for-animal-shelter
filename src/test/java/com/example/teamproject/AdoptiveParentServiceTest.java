@@ -43,24 +43,11 @@ public class AdoptiveParentServiceTest {
                 "(\\d{11})(\\s)([А-яA-z)]+)(\\s)([А-яA-z)\\s\\d]+)");
         Matcher matcher = TELEPHONE_MESSAGE.matcher("89991122333 name text message");
 
-        Update update = mock(Update.class);
-        Message message = mock(Message.class);
-        Chat chat = mock(Chat.class);
-        when(chat.id()).thenReturn(123L);
-        when(message.text()).thenReturn("89991122333 name text message");
-        when(message.chat()).thenReturn(chat);
-        when(update.message()).thenReturn(message);
-
         adoptiveParentService.saveInfoDataBase(matcher,123L);
 
-        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
-        when(telegramBot.execute(argumentCaptor.capture())).thenReturn(null);
-        telegramBotUpdatesListener.process(List.of(update));
-        SendMessage actual = argumentCaptor.getValue();
-
-
-        Assertions.assertThat(actual.getParameters().get("chat_id")).isEqualTo(123L);
-        Assertions.assertThat(actual.getParameters().get("text")).isEqualTo("Данные записаны, В ближайшее время мы с Вами свяжемся");
+        Assertions.assertThat(adoptiveParentService.findAdoptiveParentByChatId(123L).getChatId()).isEqualTo(123L);
+        Assertions.assertThat(adoptiveParentService.findAdoptiveParentByChatId(123L).getName()).isEqualTo("name");
+        Assertions.assertThat(adoptiveParentService.findAdoptiveParentByChatId(123L).getPhoneNumber()).isEqualTo(89991122333L);
     }
 
 }

@@ -57,7 +57,7 @@ public class AdoptiveParentService {
      * @return AdoptiveParent
      */
     public AdoptiveParent findAdoptiveParentByChatId(Long chatId) {
-        AdoptiveParent adoptiveParent = repository.findByChatId(chatId);
+        AdoptiveParent adoptiveParent = repository.findAdoptiveParentByChatId(chatId);
         return adoptiveParent;
     }
 

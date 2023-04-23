@@ -129,8 +129,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  */
                 if ("/start".equals(update.message().text())) {  // этап 0
                     telegramBotService.firstMenu(chatId);
-
-
                 }
                 /**
                  * Поэтапное сохранение ежедневного отчёта о питомце

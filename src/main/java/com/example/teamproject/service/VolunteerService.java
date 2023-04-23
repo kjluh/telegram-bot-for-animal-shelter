@@ -18,7 +18,15 @@ public class VolunteerService {
     /**
      * Сюда нужно будет вписать ник в телеграме волонтера
      */
-    String volunteerChat = "@ТУТ ДОЛЖЕН БЫТЬ АДРЕС ВОЛОНТЕРА!!!";
+    private String volunteerChat = "@ТУТ ДОЛЖЕН БЫТЬ АДРЕС ВОЛОНТЕРА!!!";
+
+    public String getVolunteerChat() {
+        return volunteerChat;
+    }
+
+    public void setVolunteerChat(String volunteerChat) {
+        this.volunteerChat = volunteerChat;
+    }
 
     /**
      * Метод пригласить в текущий чат волонтера

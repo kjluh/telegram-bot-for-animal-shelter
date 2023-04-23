@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AdoptiveParentRepository extends JpaRepository<AdoptiveParent, Long> {
 
-    AdoptiveParent findByChatId(Long chatId);
+    AdoptiveParent findAdoptiveParentByChatId(Long chatId);
 }
