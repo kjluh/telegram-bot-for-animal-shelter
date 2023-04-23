@@ -7,7 +7,8 @@ CREATE TABLE adoptive_parent (
                        name text,
                        phone_number bigint,
                        address text,
-                       message text
+                       message text,
+                       trial_period DATE
 );
 
 --changeSet stepan:2
