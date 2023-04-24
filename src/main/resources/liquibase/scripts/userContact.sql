@@ -8,7 +8,8 @@ CREATE TABLE adoptive_parent (
                        phone_number bigint,
                        address text,
                        message text,
-                       cat_or_dog_shelter bit
+                       cat_or_dog_shelter BOOLEAN,
+                       adoptive_parent_status smallint
 );
 
 --changeSet stepan:2

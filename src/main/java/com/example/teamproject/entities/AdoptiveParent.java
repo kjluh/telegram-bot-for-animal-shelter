@@ -61,8 +61,12 @@ public class AdoptiveParent {
     @OneToMany
     @JoinColumn(name = "adoptive_parent_id")
     private Collection<Pet> pets;
+    /**
+     * Сохраняем статус пользователя true кошки, false собаки
+     */
+    private boolean catOrDogShelter;
 
-   boolean catOrDogShelter;
+    private AdoptiveParentStatus adoptiveParentStatus;
 
     @Override
     public String toString() {

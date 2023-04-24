@@ -1,6 +1,7 @@
 package com.example.teamproject.listener;
 
 import com.example.teamproject.entities.AdoptiveParent;
+import com.example.teamproject.entities.AdoptiveParentStatus;
 import com.example.teamproject.entities.Report;
 import com.example.teamproject.service.*;
 import com.pengrad.telegrambot.TelegramBot;
@@ -75,6 +76,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     String data = update.callbackQuery().data();
                     switch (data) {
 
+                        case "cat" -> {
+                            adoptiveParentService.findAdoptiveParentByChatId(chatId).setCatOrDogShelter(true);
+                            telegramBotService.firstMenu(chatId);
+                        }
+                        case "dog" -> {
+                            adoptiveParentService.findAdoptiveParentByChatId(chatId).setCatOrDogShelter(false);
+                            telegramBotService.firstMenu(chatId);
+                        }
                         case "1" -> telegramBotService.shelterInfo(chatId);
                         case "инфа о приюте" ->
                                 telegramBot.execute(new SendMessage(chatId, "тут должна быть информация о приюте."));
@@ -105,8 +114,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
                         case "3" -> telegramBotService.sendReport(chatId);
                         case "Форма ежедневного отчёта" ->
-                            telegramBot.execute(new SendMessage(chatId, "Форма ежедневного отчёта:\n1. Фото животного\n2. Рацион животного\n" +
-                                    "3. Общее самочувствие и привыкание к новому месту \n4. Изменение в поведении"));
+                                telegramBot.execute(new SendMessage(chatId, "Форма ежедневного отчёта:\n1. Фото животного\n2. Рацион животного\n" +
+                                        "3. Общее самочувствие и привыкание к новому месту \n4. Изменение в поведении"));
                         case "принимаем отчет" -> {
                             telegramBot.execute(new SendMessage(chatId, "Напишите Id животного, для которого составляется отчёт"));
                             tempNumber = 1;
@@ -115,7 +124,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                 telegramBot.execute(volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username()));
                         case "записать данные" ->
                                 telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
-                        case "Главное меню" -> telegramBotService.firstMenu(chatId);
+                        case "Главное меню" -> {
+                            telegramBotService.firstMenu(chatId);
+                            telegramBotService.catOrDogMenu(chatId);
+                        }
                     }
                     return;
                 }
@@ -128,9 +140,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  * Обработка сообщения от пользователя и вызов основного меню
                  */
                 if ("/start".equals(update.message().text())) {  // этап 0
-//                    boolean catOrDog = adoptiveParentService.findAdoptiveParentById(chatId).isCatOrDogShelter();
-//ВОТ ТУТ ДОЛЖЕН БЫТЬ выбор приюта.
-                    telegramBotService.firstMenu(chatId);
+                    if (adoptiveParentService.findAdoptiveParentByChatId(chatId) == null) {
+                        adoptiveParentService.saveParentDataBase(chatId);
+                    }
+                    telegramBotService.catOrDogMenu(chatId);
                 }
                 /**
                  * Поэтапное сохранение ежедневного отчёта о питомце
@@ -140,26 +153,22 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     tempReport.setAdoptiveParent(adoptiveParentService.findAdoptiveParentByChatId(chatId));
                     telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, вышлите фото животного"));
                     tempNumber = 2;
-                }
-                else if (update.message().photo() != null && tempNumber == 2) { // проверяем что пришло фото
+                } else if (update.message().photo() != null && tempNumber == 2) { // проверяем что пришло фото
                     tempReport.setPhotoId((update.message().photo()[update.message().photo().length - 1]).fileId());
                     logger.info("Id photo {} ", tempReport.getPhotoId());
                     telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите рацион животного"));
                     tempNumber = 3;
-                }
-                else if (tempNumber == 3) {
+                } else if (tempNumber == 3) {
                     tempReport.setDiet(update.message().text());
                     logger.info("Diet {} ", tempReport.getDiet());
                     telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите общее самочувствие и привыкание к новому месту"));
                     tempNumber = 4;
-                }
-                else if (tempNumber == 4) {
+                } else if (tempNumber == 4) {
                     tempReport.setHealth(update.message().text());
                     logger.info("Health {} ", tempReport.getHealth());
                     telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите изменение в поведении: отказ от старых привычек, приобретение новых. Если такие имееются"));
                     tempNumber = 5;
-                }
-                else if (tempNumber == 5) {
+                } else if (tempNumber == 5) {
                     tempReport.setBehavior(update.message().text());
                     logger.info("Behavior {} ", tempReport.getBehavior());
                     telegramBot.execute(new SendMessage(chatId, "Спасибо, информации принята!"));
