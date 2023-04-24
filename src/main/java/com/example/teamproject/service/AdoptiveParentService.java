@@ -97,4 +97,8 @@ public class AdoptiveParentService {
     public Collection<AdoptiveParent> findAll() {
         return repository.findAll();
     }
+
+    public AdoptiveParent save(AdoptiveParent newAdoptiveParent) {
+        return repository.save(newAdoptiveParent);
+    }
 }

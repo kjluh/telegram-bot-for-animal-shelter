@@ -1,4 +1,4 @@
-package com.example.teamproject.controller;
+package com.example.teamproject.controllers;
 
 import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.Pet;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/teamProject8")
+@RequestMapping("/pets")
 public class PetController {
     private final PetService petService;
 
