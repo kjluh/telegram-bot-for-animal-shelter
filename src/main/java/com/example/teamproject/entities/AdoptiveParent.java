@@ -58,15 +58,6 @@ public class AdoptiveParent {
     @JoinColumn(name="adoptive_parent_id")
     private Collection<Pet> pets;
 
-    private LocalDate trialPeriod;
-
-    public LocalDate getTrialPeriod() {
-        return trialPeriod;
-    }
-
-    public void setTrialPeriod(LocalDate trialPeriod) {
-        this.trialPeriod = trialPeriod;
-    }
 
     public Long getChatId() {
         return chatId;
