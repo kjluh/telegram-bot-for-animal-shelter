@@ -1,5 +1,6 @@
 package com.example.teamproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class Report {
      */
     @ManyToOne
     @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private AdoptiveParent adoptiveParent;
 
     /**
@@ -35,6 +37,7 @@ public class Report {
      */
     @ManyToOne
     @JoinColumn(name = "pet_id")
+
     private Pet pet;
 
     /**
