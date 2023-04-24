@@ -93,4 +93,8 @@ public class AdoptiveParentService {
         adoptiveParent.setChatId(chatId);
         repository.save(adoptiveParent);
     }
+
+    public Collection<AdoptiveParent> findAll() {
+        return repository.findAll();
+    }
 }
