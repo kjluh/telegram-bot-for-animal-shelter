@@ -3,6 +3,7 @@ package com.example.teamproject.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -40,6 +41,18 @@ public class Pet {
      * Описание питомца
      */
     private String description;
+    /**
+     * Дата окончания испытательного срока
+     */
+    private LocalDate trialPeriod;
+
+    public LocalDate getTrialPeriod() {
+        return trialPeriod;
+    }
+
+    public void setTrialPeriod(LocalDate trialPeriod) {
+        this.trialPeriod = trialPeriod;
+    }
 
     public Long getId() {
         return id;
@@ -94,12 +107,12 @@ public class Pet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return age == pet.age && Objects.equals(id, pet.id) && Objects.equals(adoptiveParent, pet.adoptiveParent) && Objects.equals(type, pet.type) && Objects.equals(name, pet.name) && Objects.equals(description, pet.description);
+        return age == pet.age && Objects.equals(id, pet.id) && Objects.equals(adoptiveParent, pet.adoptiveParent) && Objects.equals(type, pet.type) && Objects.equals(name, pet.name) && Objects.equals(description, pet.description) && Objects.equals(trialPeriod, pet.trialPeriod);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, adoptiveParent, type, name, age, description);
+        return Objects.hash(id, adoptiveParent, type, name, age, description, trialPeriod);
     }
 
     @Override
@@ -111,6 +124,7 @@ public class Pet {
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 ", description='" + description + '\'' +
+                ", trialPeriod=" + trialPeriod +
                 '}';
     }
 }
