@@ -1,5 +1,6 @@
 package com.example.teamproject.listener;
 
+import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.Report;
 import com.example.teamproject.service.*;
 import com.pengrad.telegrambot.TelegramBot;
@@ -127,6 +128,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  * Обработка сообщения от пользователя и вызов основного меню
                  */
                 if ("/start".equals(update.message().text())) {  // этап 0
+//                    boolean catOrDog = adoptiveParentService.findAdoptiveParentById(chatId).isCatOrDogShelter();
+//ВОТ ТУТ ДОЛЖЕН БЫТЬ выбор приюта.
                     telegramBotService.firstMenu(chatId);
                 }
                 /**

@@ -2,11 +2,16 @@ package com.example.teamproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+
 @Entity
+@Getter
+@Setter
 public class Pet {
     /**
      * Уникальный ID для хранения класса в БД и использования экземпляра в программе
@@ -46,61 +51,6 @@ public class Pet {
      */
     private LocalDate trialPeriod;
 
-    public LocalDate getTrialPeriod() {
-        return trialPeriod;
-    }
-
-    public void setTrialPeriod(LocalDate trialPeriod) {
-        this.trialPeriod = trialPeriod;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public AdoptiveParent getAdoptiveParent() {
-        return adoptiveParent;
-    }
-
-    public void setAdoptiveParent(AdoptiveParent adoptiveParent) {
-        this.adoptiveParent = adoptiveParent;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     @Override
     public boolean equals(Object o) {
