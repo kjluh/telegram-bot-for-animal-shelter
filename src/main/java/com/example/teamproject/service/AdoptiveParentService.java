@@ -84,4 +84,17 @@ public class AdoptiveParentService {
             addUserContact(chatId, name, messageText, phoneNumber); // создаем и пишем контакт в базу
           return new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
     }
+    /**
+     * Добавляем Потенциального усыновителя в БД по чат ID
+     * @param chatId ID чата
+     */
+    public void saveParentDataBase(Long chatId) {
+        AdoptiveParent adoptiveParent = new AdoptiveParent();
+        adoptiveParent.setChatId(chatId);
+        repository.save(adoptiveParent);
+    }
+
+    public Collection<AdoptiveParent> findAll() {
+        return repository.findAll();
+    }
 }

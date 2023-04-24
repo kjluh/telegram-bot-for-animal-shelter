@@ -1,6 +1,7 @@
 package com.example.teamproject.service;
 
 import com.example.teamproject.entities.AdoptiveParent;
+import com.example.teamproject.entities.Pet;
 import com.example.teamproject.entities.Report;
 import com.example.teamproject.repositories.AdoptiveParentRepository;
 import com.example.teamproject.repositories.ReportRepository;
@@ -29,6 +30,10 @@ public class ReminderForParents {
     @Autowired
     private AdoptiveParentRepository adoptiveParentRepository;
 
+    /**
+     * Метод каждый день в 23:59 проверяет - отправлял ли пользователь отчет о питомце, если нет напоминает ему.
+     * Если отчет не высылался 2 дня пишет наставнику.
+     */
     @Scheduled(cron = "* 59 23 * * *")
     public void checkForReports() {
         List<AdoptiveParent> adoptiveParents = adoptiveParentRepository.findAll(); // получаем всех усыновителей
@@ -48,10 +53,13 @@ public class ReminderForParents {
     @Scheduled(cron = "* 00 10 * * *")
     public void checkTrialPeriod() {
         List<AdoptiveParent> adoptiveParents = adoptiveParentRepository.findAll(); // получаем всех усыновителей
-            for (AdoptiveParent aPs: adoptiveParents){
-                if (aPs.getTrialPeriod().equals(LocalDate.now())){
-                    telegramBot.execute(new SendMessage(aPs.getChatId(),"Поздравляем с завершением испытательного срока"));
+        for (AdoptiveParent aPs : adoptiveParents) {
+            Collection<Pet> pets = aPs.getPets();
+            for (Pet petNow : pets) {
+                if (petNow.getTrialPeriod().equals(LocalDate.now())) {
+                    telegramBot.execute(new SendMessage(aPs.getChatId(), "Поздравляем с завершением испытательного срока"));
                 }
             }
+        }
     }
 }

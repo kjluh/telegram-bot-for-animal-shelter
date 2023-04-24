@@ -1,6 +1,8 @@
 package com.example.teamproject.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -11,6 +13,8 @@ import java.util.Objects;
  * В классе несколько параметров: id, chatId, name, phoneNumber, message и стандартные геттеры, сеттеры,
  * equals и hashCode.
  */
+@Getter
+@Setter
 @Entity
 public class AdoptiveParent {
     /**
@@ -55,78 +59,14 @@ public class AdoptiveParent {
      * Список всех животных одного хозяина
      */
     @OneToMany
-    @JoinColumn(name="adoptive_parent_id")
+    @JoinColumn(name = "adoptive_parent_id")
     private Collection<Pet> pets;
+    /**
+     * Сохраняем статус пользователя true кошки, false собаки
+     */
+    private boolean catOrDogShelter;
 
-    private LocalDate trialPeriod;
-
-    public LocalDate getTrialPeriod() {
-        return trialPeriod;
-    }
-
-    public void setTrialPeriod(LocalDate trialPeriod) {
-        this.trialPeriod = trialPeriod;
-    }
-
-    public Long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Long phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Collection<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(Collection<Report> reports) {
-        this.reports = reports;
-    }
-
-    public Collection<Pet> getPets() {
-        return pets;
-    }
-
-    public void setPets(Collection<Pet> pets) {
-        this.pets = pets;
-    }
+    private AdoptiveParentStatus adoptiveParentStatus;
 
     @Override
     public String toString() {

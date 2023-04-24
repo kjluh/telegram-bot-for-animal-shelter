@@ -1,6 +1,8 @@
 package com.example.teamproject.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -10,6 +12,8 @@ import java.util.Objects;
  * В классе несколько параметров: id, parentId, petId, photo, diet, health, behavior и стандартные геттеры, сеттеры,
  * equals и hashCode.
  */
+@Getter
+@Setter
 @Entity
 public class Report {
     /**
@@ -61,66 +65,6 @@ public class Report {
     public Report() {
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getPhotoId() {
-        return photoId;
-    }
-
-    public void setPhotoId(String photoId) {
-        this.photoId = photoId;
-    }
-
-    public String getDiet() {
-        return diet;
-    }
-
-    public void setDiet(String diet) {
-        this.diet = diet;
-    }
-
-    public String getHealth() {
-        return health;
-    }
-
-    public void setHealth(String health) {
-        this.health = health;
-    }
-
-    public String getBehavior() {
-        return behavior;
-    }
-
-    public void setBehavior(String behavior) {
-        this.behavior = behavior;
-    }
-
-    public LocalDate getReportDate() {
-        return reportDate;
-    }
-
-    public void setReportDate(LocalDate reportDate) {
-        this.reportDate = reportDate;
-    }
-
-    public Pet getPet() {
-        return pet;
-    }
-
-    public void setPet(Pet pet) {
-        this.pet = pet;
-    }
-
-    public AdoptiveParent getAdoptiveParent() {
-        return adoptiveParent;
-    }
-
-    public void setAdoptiveParent(AdoptiveParent adoptiveParent) {
-        this.adoptiveParent = adoptiveParent;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -162,4 +162,16 @@ public class TelegramBotService {
         return button;
     }
 
+    public void catOrDogMenu(Long chatId) { // меню начальное, кейсы 1/2/3
+        SendMessage helloMessage = new SendMessage(chatId, "Выберите какой приют Вам нужен");
+
+        InlineKeyboardButton button1 = new InlineKeyboardButton("Кошачий");
+        button1.callbackData("cat");
+        InlineKeyboardButton button2 = new InlineKeyboardButton("Собачий");
+        button2.callbackData("dog");
+        InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
+        keyboard.addRow(button1, button2);
+        helloMessage.replyMarkup(keyboard);
+        telegramBot.execute(helloMessage);
+    }
 }

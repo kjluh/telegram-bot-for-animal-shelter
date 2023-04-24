@@ -1,17 +1,16 @@
-package com.example.teamproject.controllers;
+package com.example.teamproject.controller;
 
 import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.service.AdoptiveParentService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/adoptive_parent")
+import java.util.Collection;
+
 public class AdoptiveParentController {
+
 
     private final AdoptiveParentService adoptiveParensService;
 
@@ -19,9 +18,13 @@ public class AdoptiveParentController {
         this.adoptiveParensService = adoptiveParensService;
     }
 
+    @GetMapping("/get_all")
+    public ResponseEntity<Collection<AdoptiveParent>> getAll() {
+        return ResponseEntity.ok(adoptiveParensService.findAll());
+    }
 
     @GetMapping("/get_by_id")
-    public ResponseEntity<AdoptiveParent> getAdoptiveParent(@Parameter(description = "id усыновителя") @RequestParam Long id){
+    public ResponseEntity<AdoptiveParent> getById(@Parameter(description = "id усыновителя") @RequestParam Long id){
         return ResponseEntity.ok(adoptiveParensService.findAdoptiveParentById(id));
     }
 }
