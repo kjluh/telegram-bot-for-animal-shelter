@@ -14,6 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 @RestController
@@ -116,6 +119,41 @@ public class PetController {
     @PutMapping
     public ResponseEntity<Pet> updatePet(@Parameter(description = "Измененные данные питомца") @RequestParam Pet pet){
         return ResponseEntity.ok(petService.updatePet(pet));
+    }
+
+    @Operation(
+            summary = "Изменить дату испытательного срока у питомца",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Дата успешно изменена",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "415",
+                            description = "Ошибка: Питомец не найден или данные не корректны",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    )
+            }
+    )
+
+    @PutMapping("{id} {date}")
+    public ResponseEntity<Pet> updatePetTrialPeriodById(@Parameter(description = "id питомца") @PathVariable Long id,
+                                                        @Parameter(description = "Новая дата в формате день.месяц.год (15.01.2023)") @PathVariable String date){
+
+        if (date.matches("[0-3]\\d\\.[0-1]\\d\\.[2-9]\\d\\d\\d")) { //Проверем дату по регулярному выражению
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy"); //Создаем паттерн для парсинга строки в дату
+            LocalDate realDate = LocalDate.parse(date, formatter); // переводим строку в дату
+            Pet pet = petService.getPetById(id); //Вытаскиваем питомца из базы по id
+            pet.setTrialPeriod(realDate); // Меняем дату
+            return ResponseEntity.ok(petService.updatePet(pet)); // Сохраняем с новой датой
+        } else {
+            return ResponseEntity.status(415).build(); // Если дата не верно написана, то возвращаем ошибку
+        }
     }
 
     @Operation(
