@@ -17,15 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/teamProject8")
-public class TelegramBotController {
+@RequestMapping("/pets")
+public class PetController {
     private final PetService petService;
 
-    private final AdoptiveParentService adoptiveParensService;
-
-    public TelegramBotController(PetService petService, AdoptiveParentService adoptiveParensService) {
+    public PetController(PetService petService) {
         this.petService = petService;
-        this.adoptiveParensService = adoptiveParensService;
     }
 
     @Operation(
@@ -95,11 +92,6 @@ public class TelegramBotController {
     @GetMapping("/")
     public Collection<Pet> getPet(@Parameter(description = "кличка питомца") @RequestParam String name) {
         return petService.getPet(name);
-    }
-
-    @GetMapping("/get_adoptive_parent")
-    public ResponseEntity<AdoptiveParent> getAdoptiveParent(@Parameter(description = "id усыновителя") @RequestParam Long id){
-        return ResponseEntity.ok(adoptiveParensService.findAdoptiveParentById(id));
     }
 
     @Operation(
