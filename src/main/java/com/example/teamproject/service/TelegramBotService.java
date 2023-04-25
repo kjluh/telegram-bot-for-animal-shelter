@@ -168,6 +168,10 @@ public class TelegramBotService {
         return button;
     }
 
+    /**
+     * Меню из кнопок для выбора типа животного в приюте, сразу после выбора сохраняет нового потенциального клиента в ДБ
+     * @param chatId ID чата пользователя
+     */
     public void catOrDogMenu(Long chatId) { // меню начальное, кейсы 1/2/3
         SendMessage helloMessage = new SendMessage(chatId, "Выберите какой приют Вам нужен");
 

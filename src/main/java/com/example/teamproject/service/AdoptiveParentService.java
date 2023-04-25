@@ -79,21 +79,17 @@ public class AdoptiveParentService {
     }
 
     /**
-     * Добавляем Потенциального усыновителя в БД по чат ID
-     *
-     * @param chatId ID чата
+     * Добавляем или обновляем в БД потенциального пользователя тип питомца по которому он обратился,
+     * для отображения правильного меню
+     * @param chatId ID чата пользователя
+     * @param pet Тип питомца по которому обратился пользователь
      */
-    public void saveParentDataBase(Long chatId) {
-        AdoptiveParent adoptiveParent = new AdoptiveParent();
-        adoptiveParent.setChatId(chatId);
-        repository.save(adoptiveParent);
-    }
-
     public void saveParentDataBase(Long chatId, TypeOfPet pet) {
         AdoptiveParent adoptiveParent = findAdoptiveParentByChatId(chatId);
         if (adoptiveParent==null){
-            saveParentDataBase(chatId);
-            adoptiveParent = findAdoptiveParentByChatId(chatId);
+            adoptiveParent = new AdoptiveParent();
+            adoptiveParent.setChatId(chatId);
+            repository.save(adoptiveParent);
         }
         adoptiveParent.setTypeOfPet(pet);
         repository.save(adoptiveParent);

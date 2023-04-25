@@ -135,7 +135,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  */
                 if ("/start".equals(update.message().text())) {  // этап 0
                     if (adoptiveParentService.findAdoptiveParentByChatId(chatId) == null) {
-                        adoptiveParentService.saveParentDataBase(chatId);
+                        adoptiveParentService.saveParentDataBase(chatId,null);
                     }
                     telegramBotService.catOrDogMenu(chatId);
                 }

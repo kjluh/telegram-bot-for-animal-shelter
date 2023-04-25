@@ -4,9 +4,7 @@ import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.Pet;
 import com.example.teamproject.entities.Report;
 import com.example.teamproject.repositories.AdoptiveParentRepository;
-import com.example.teamproject.repositories.ReportRepository;
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -50,6 +48,9 @@ public class ReminderForParents {
         }
     }
 
+    /**
+     * Метод каждый день в 10 00 проверяет в базе всех усыновителей и поздравляет тех чей испытательный срок кончился.
+     */
     @Scheduled(cron = "* 00 10 * * *")
     public void checkTrialPeriod() {
         List<AdoptiveParent> adoptiveParents = adoptiveParentRepository.findAll(); // получаем всех усыновителей

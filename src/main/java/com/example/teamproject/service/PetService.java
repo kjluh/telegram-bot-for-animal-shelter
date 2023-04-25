@@ -9,9 +9,7 @@ import java.util.Collection;
 @Service
 public class PetService {
 
-
     private final PetRepository petRepository;
-
 
     public PetService(PetRepository petRepository) {
         this.petRepository = petRepository;

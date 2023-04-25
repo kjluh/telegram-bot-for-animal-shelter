@@ -11,10 +11,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class VolunteerService {
-
-    @Autowired
-    private TelegramBot telegramBot;
-
     /**
      * Сюда нужно будет вписать ник в телеграме волонтера
      */
