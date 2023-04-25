@@ -1,15 +1,11 @@
 package com.example.teamproject.listener;
 
-import com.example.teamproject.entities.AdoptiveParent;
-import com.example.teamproject.entities.AdoptiveParentStatus;
 import com.example.teamproject.entities.Report;
+import com.example.teamproject.entities.TypeOfPet;
 import com.example.teamproject.service.*;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -18,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +32,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     @Autowired
     private ReportService reportService;
+
     @Autowired
     private PetService petService;
 
@@ -77,11 +71,11 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     switch (data) {
 
                         case "cat" -> {
-                            adoptiveParentService.findAdoptiveParentByChatId(chatId).setCatOrDogShelter(true);
+                            adoptiveParentService.saveParentDataBase(chatId,TypeOfPet.CAT);
                             telegramBotService.firstMenu(chatId);
                         }
                         case "dog" -> {
-                            adoptiveParentService.findAdoptiveParentByChatId(chatId).setCatOrDogShelter(false);
+                            adoptiveParentService.saveParentDataBase(chatId, TypeOfPet.DOG);
                             telegramBotService.firstMenu(chatId);
                         }
                         case "1" -> telegramBotService.shelterInfo(chatId);

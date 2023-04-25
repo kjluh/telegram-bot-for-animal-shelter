@@ -1,5 +1,6 @@
 package com.example.teamproject.service;
 
+import com.example.teamproject.entities.TypeOfPet;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
@@ -12,6 +13,9 @@ public class TelegramBotService {
 
     @Autowired
     private TelegramBot telegramBot;
+
+    @Autowired
+    private AdoptiveParentService adoptiveParentService;
 
     /**
      * Метод показывает пользователю кнопу "записать данные" в чате бота, использует {@link InlineKeyboardButton}
@@ -33,17 +37,17 @@ public class TelegramBotService {
     public void takeDogFromShelter(Long chatId) {  // кнопки этапа 2, кейсы между 2 и 3
         SendMessage message = new SendMessage(chatId, "Приветствует в нашем приюте");
 
-        InlineKeyboardButton button1 = new InlineKeyboardButton("Правила знакомства с собакой до того, как можно забрать ее из приюта.");
+        InlineKeyboardButton button1 = new InlineKeyboardButton("Правила знакомства с животным до того, как забрать его из приюта.");
         button1.callbackData("Правила знакомства");
-        InlineKeyboardButton button2 = new InlineKeyboardButton("Список документов, необходимых для того, чтобы взять собаку из приюта.");
+        InlineKeyboardButton button2 = new InlineKeyboardButton("Список документов, необходимых для того, чтобы взять животное из приюта.");
         button2.callbackData("Список документов");
         InlineKeyboardButton button3 = new InlineKeyboardButton("Список рекомендаций по транспортировке животного.");
         button3.callbackData("транспортировка животного");
-        InlineKeyboardButton button4 = new InlineKeyboardButton("Список рекомендаций по обустройству дома для щенка.");
+        InlineKeyboardButton button4 = new InlineKeyboardButton("Список рекомендаций по обустройству дома для щенка/котенка.");
         button4.callbackData("дома для щенка");
-        InlineKeyboardButton button5 = new InlineKeyboardButton("Список рекомендаций по обустройству дома для взрослой собаки.");
+        InlineKeyboardButton button5 = new InlineKeyboardButton("Список рекомендаций по обустройству дома для взрослого животного.");
         button5.callbackData("дома для собаки");
-        InlineKeyboardButton button6 = new InlineKeyboardButton("Список рекомендаций по обустройству дома для собаки с ограниченными возможностями (зрение, передвижение).");
+        InlineKeyboardButton button6 = new InlineKeyboardButton("Список рекомендаций по обустройству дома для животного с ограниченными возможностями (зрение, передвижение). ");
         button6.callbackData("дома для собаки с ограничениями");
         InlineKeyboardButton button7 = new InlineKeyboardButton("Советы кинолога по первичному общению с собакой");
         button7.callbackData("советы кинолога");
@@ -58,8 +62,10 @@ public class TelegramBotService {
         keyboard.addRow(button4);
         keyboard.addRow(button5);
         keyboard.addRow(button6);
-        keyboard.addRow(button7);
-        keyboard.addRow(button8);
+        if (adoptiveParentService.findAdoptiveParentByChatId(chatId).getTypeOfPet().equals(TypeOfPet.DOG)) {
+            keyboard.addRow(button7);
+            keyboard.addRow(button8);
+        }
         keyboard.addRow(button9);
         keyboard.addRow(saveInfo());
         keyboard.addRow(helpVolunteers());

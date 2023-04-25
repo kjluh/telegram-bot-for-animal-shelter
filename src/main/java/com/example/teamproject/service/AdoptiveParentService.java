@@ -2,6 +2,7 @@ package com.example.teamproject.service;
 
 import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.Pet;
+import com.example.teamproject.entities.TypeOfPet;
 import com.example.teamproject.repositories.AdoptiveParentRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.PhotoSize;
@@ -25,13 +26,7 @@ import java.util.regex.Matcher;
 public class AdoptiveParentService {
 
     @Autowired
-    private TelegramBot telegramBot;
-
-    @Autowired
     private AdoptiveParentRepository repository;
-
-    @Autowired
-    private PetService petService;
 
     /**
      * Метод сохранения запроса пользователя в БД использует метод {@link JpaRepository#save(Object)}
@@ -72,25 +67,35 @@ public class AdoptiveParentService {
     }
 
     /**
-     *
-     *
      * @param matcher фильтр сообщения
      * @param chatId
      */
     public SendMessage saveInfoDataBase(Matcher matcher, Long chatId) {
-            String phoneNumber = matcher.group(1); // получаем телефон
-            String name = matcher.group(3); // получаем имя
-            String messageText = matcher.group(5); // получаем текст сообщения
-            addUserContact(chatId, name, messageText, phoneNumber); // создаем и пишем контакт в базу
-          return new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
+        String phoneNumber = matcher.group(1); // получаем телефон
+        String name = matcher.group(3); // получаем имя
+        String messageText = matcher.group(5); // получаем текст сообщения
+        addUserContact(chatId, name, messageText, phoneNumber); // создаем и пишем контакт в базу
+        return new SendMessage(chatId, "Данные записаны, В ближайшее время мы с Вами свяжемся");
     }
+
     /**
      * Добавляем Потенциального усыновителя в БД по чат ID
+     *
      * @param chatId ID чата
      */
     public void saveParentDataBase(Long chatId) {
         AdoptiveParent adoptiveParent = new AdoptiveParent();
         adoptiveParent.setChatId(chatId);
+        repository.save(adoptiveParent);
+    }
+
+    public void saveParentDataBase(Long chatId, TypeOfPet pet) {
+        AdoptiveParent adoptiveParent = findAdoptiveParentByChatId(chatId);
+        if (adoptiveParent==null){
+            saveParentDataBase(chatId);
+            adoptiveParent = findAdoptiveParentByChatId(chatId);
+        }
+        adoptiveParent.setTypeOfPet(pet);
         repository.save(adoptiveParent);
     }
 }
