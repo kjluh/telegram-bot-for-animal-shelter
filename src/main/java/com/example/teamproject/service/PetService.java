@@ -52,6 +52,16 @@ public class PetService {
     }
 
     /**
+     * Обновление данных по питомцу
+     *
+     * @param pet Сущьность нового питомца
+     * @return Возвращаем питомца в качестве положительного ответа
+     */
+    public Pet updatePet(Pet pet) {
+        return petRepository.save(pet);
+    }
+
+    /**
      * Удаляем животное из БД
      * @param id ID для удаления
      * @return возвращаем удаленное животное

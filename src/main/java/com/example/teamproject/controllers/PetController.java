@@ -95,6 +95,30 @@ public class PetController {
     }
 
     @Operation(
+            summary = "Изменить питомца",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "415",
+                            description = "Ошибка: Питомец не найден или данные не корректны",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    )
+            }
+    )
+
+    @PutMapping
+    public ResponseEntity<Pet> updatePet(@Parameter(description = "Измененные данные питомца") @RequestParam Pet pet){
+        return ResponseEntity.ok(petService.updatePet(pet));
+    }
+
+    @Operation(
             summary = "Удаление питомца из приюта",
             responses = {
                     @ApiResponse(

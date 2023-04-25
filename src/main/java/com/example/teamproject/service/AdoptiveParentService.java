@@ -95,11 +95,41 @@ public class AdoptiveParentService {
         repository.save(adoptiveParent);
     }
 
+    /**
+     * Найти всех усыновителей со всеми питомцами
+     *
+     * @return Все усыновители с питомцами
+     */
     public Collection<AdoptiveParent> findAll() {
         return repository.findAll();
     }
 
+    /**
+     * Сохранить в БД нового усыновителя
+     *
+     * @param newAdoptiveParent Сущность нового усыновителя
+     * @return Возвращаем добавленную сущность в качестве положительного ответа
+     */
     public AdoptiveParent save(AdoptiveParent newAdoptiveParent) {
         return repository.save(newAdoptiveParent);
+    }
+
+    /**
+     * Обновление информации по усыновителю
+     *
+     * @param adoptiveParent Обновленная информация по усыновителю
+     * @return Возвращаем обновленную сущность в качестве положительного ответа
+     */
+    public AdoptiveParent updateAdoptiveParent(AdoptiveParent adoptiveParent) {
+        return repository.save(adoptiveParent);
+    }
+
+    /**
+     * Удаление усыновителя из БД
+     *
+     * @param id id усыновителя
+     */
+    public void deleteAdoptiveParentById(Long id) {
+        repository.deleteById(id);
     }
 }
