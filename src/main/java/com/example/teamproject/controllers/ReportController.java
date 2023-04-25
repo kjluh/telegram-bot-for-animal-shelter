@@ -1,7 +1,6 @@
-package com.example.teamproject.controller;
+package com.example.teamproject.controllers;
 
 import com.example.teamproject.entities.Report;
-import com.example.teamproject.repositories.ReportRepository;
 import com.example.teamproject.service.ReportService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

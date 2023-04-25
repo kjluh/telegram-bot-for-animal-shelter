@@ -1,4 +1,4 @@
-package com.example.teamproject.controller;
+package com.example.teamproject.controllers;
 
 import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.Pet;
