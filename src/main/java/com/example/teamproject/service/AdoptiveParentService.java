@@ -86,7 +86,7 @@ public class AdoptiveParentService {
      */
     public void saveParentDataBase(Long chatId, TypeOfPet pet) {
         AdoptiveParent adoptiveParent = findAdoptiveParentByChatId(chatId);
-        if (adoptiveParent==null){
+        if (adoptiveParent == null){
             adoptiveParent = new AdoptiveParent();
             adoptiveParent.setChatId(chatId);
             repository.save(adoptiveParent);

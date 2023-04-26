@@ -1,4 +1,4 @@
-package com.example.teamproject;
+package com.example.teamproject.listener;
 
 import com.example.teamproject.listener.TelegramBotUpdatesListener;
 import com.pengrad.telegrambot.TelegramBot;
