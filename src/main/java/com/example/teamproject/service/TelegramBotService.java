@@ -62,7 +62,8 @@ public class TelegramBotService {
         keyboard.addRow(button4);
         keyboard.addRow(button5);
         keyboard.addRow(button6);
-        if (adoptiveParentService.findAdoptiveParentByChatId(chatId).getTypeOfPet().equals(TypeOfPet.DOG)) {
+        if (adoptiveParentService.findAdoptiveParentByChatId(chatId).getTypeOfPet().equals(TypeOfPet.DOG) ||
+                adoptiveParentService.findAdoptiveParentByChatId(chatId).getTypeOfPet() == null) {
             keyboard.addRow(button7);
             keyboard.addRow(button8);
         }

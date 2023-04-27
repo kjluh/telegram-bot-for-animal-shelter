@@ -26,9 +26,6 @@ public class VolunteerServiceTest {
     @Autowired
     private TelegramBotUpdatesListener telegramBotUpdatesListener;
 
-    @Autowired
-    private VolunteerService volunteerService;
-
     @Test
     public void volunteerServiceTest() {
         Update update = mock(Update.class);

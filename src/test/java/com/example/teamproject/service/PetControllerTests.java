@@ -1,4 +1,4 @@
-package com.example.teamproject;
+package com.example.teamproject.service;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class TeamProjectApplicationTests {
+class PetControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -29,10 +29,10 @@ class TeamProjectApplicationTests {
         testJSONObject.put("description", "description");
         mockMvc.
                 perform(
-                        post("/teamProject8").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
+                        post("/pets").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
                 .andExpect(status().isOk());
         mockMvc.perform(
-                        get("/teamProject8"))
+                        get("/pets"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].name").value("testCreatePet"))
@@ -43,10 +43,9 @@ class TeamProjectApplicationTests {
 
     @Test
     void testCreatePetError() throws Exception {
-        JSONObject testJSONObject = new JSONObject();
         mockMvc.
                 perform(
-                        post("/teamProject8").contentType(MediaType.ALL_VALUE).content("yfyiukbh"))
+                        post("/pets").contentType(MediaType.ALL_VALUE).content("yfyiukbh"))
                 .andExpect(status().is(415));
     }
 
@@ -60,10 +59,10 @@ class TeamProjectApplicationTests {
         testJSONObject.put("description", "description");
         mockMvc.
                 perform(
-                        post("/teamProject8").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
+                        post("/pets").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
                 .andExpect(status().isOk());
         mockMvc.perform(
-                        get("/teamProject8/?name=testGetPet"))
+                        get("/pets/?name=testGetPet"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].name").value("testGetPet"))
@@ -75,7 +74,7 @@ class TeamProjectApplicationTests {
     @Test
     void testGetPetError() throws Exception {
         mockMvc.perform(
-                        get("/teamProject8/?name=test"))
+                        get("/pets/?name=test"))
                 .andExpect(jsonPath("$.size()").value(0));
     }
 
@@ -89,10 +88,10 @@ class TeamProjectApplicationTests {
         testJSONObjectForDelete.put("description", "description");
         mockMvc.
                 perform(
-                        post("/teamProject8").contentType(MediaType.APPLICATION_JSON).content(testJSONObjectForDelete.toString()))
+                        post("/pets").contentType(MediaType.APPLICATION_JSON).content(testJSONObjectForDelete.toString()))
                 .andExpect(status().isOk());
         mockMvc.perform(
-                        delete("/teamProject8/1"))
+                        delete("/pets/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("testDeletePet"))
                 .andExpect(jsonPath("$.type").value("test"))
@@ -110,7 +109,7 @@ class TeamProjectApplicationTests {
         testJSONObjectForDelete.put("description", "description");
 
         mockMvc.perform(
-                        delete("/teamProject8/1"))
+                        delete("/pets/1"))
                 .andExpect(status().is(404));
 
     }

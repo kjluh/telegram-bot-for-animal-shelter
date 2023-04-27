@@ -28,7 +28,7 @@ public class TelegramBotUpdatesListenerTest {
     @Test
     public void handlerStartMessageTest() {
         String inputMessage = "/start";
-        String outMessage = "Привет,  тут должна быть информация о боте. Выберите интересующий пункт из меню: ";
+        String outMessage = "Выберите какой приют Вам нужен";
         Assertions.assertThat(testHandlerByChatMassage(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
         Assertions.assertThat(testHandlerByChatMassage(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
     }
@@ -36,7 +36,7 @@ public class TelegramBotUpdatesListenerTest {
     @Test
     public void handlerStartMessageTestFirstMenu() {
         String inputMessage = "Главное меню";
-        String outMessage = "Привет,  тут должна быть информация о боте. Выберите интересующий пункт из меню: ";
+        String outMessage = "Выберите какой приют Вам нужен";
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
     }
@@ -173,7 +173,7 @@ public class TelegramBotUpdatesListenerTest {
     @Test
     public void telegramBotServiceSendReport2Test() {
         String inputMessage = "принимаем отчет";
-        String outMessage = "Вышлите фото животного";
+        String outMessage = "Напишите Id животного, для которого составляется отчёт";
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
     }
