@@ -73,7 +73,6 @@ public class AdoptiveParentServiceTest {
         assertEquals(adoptiveParentRepository.findById(1L), Optional.of(adoptiveParent));
     }
 
-    //НЕ РАБОТАЕТ!!!!
     @Test
     public void saveInfoDataBaseTest(){
 
