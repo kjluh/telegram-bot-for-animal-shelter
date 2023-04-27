@@ -1,5 +1,6 @@
 package com.example.teamproject.service;
 
+import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.Report;
 import com.example.teamproject.repositories.ReportRepository;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,22 @@ public class ReportService {
      */
     public Collection<Report> getAllReports() {
         return reportRepository.findAll();
+    }
+    /**
+     * Получаем список всех отчётов в приюте
+     * @return list объектов класса REPORT из БД
+     */
+    public Collection<Report> getAllReportsByAdoptiveParent(Long id) {
+        return reportRepository.findReportsByAdoptiveParent_Id(id);
+    }
+
+    /**
+     * Обновляем отчёт в БД
+     * @param report для изменения
+     * @return возвращаем изменённый отчёт
+     */
+    public Report updateReport (Report report) {
+        return reportRepository.save(report);
     }
 
     /**
