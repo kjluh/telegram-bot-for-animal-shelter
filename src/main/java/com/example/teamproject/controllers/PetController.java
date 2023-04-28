@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.HTML;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +31,7 @@ public class PetController {
 
     @Operation(
             summary = "Загрузка питомца в базу приюта",
+            description = "параметры питомца",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -48,7 +50,7 @@ public class PetController {
             }
     )
     @PostMapping()
-    public Pet loadPet(@Parameter(description = "Передаем питомца") @RequestBody Pet pet) {
+    public Pet loadPet(@RequestBody Pet pet) {
         return petService.loadPet(pet);
     }
 
@@ -77,6 +79,7 @@ public class PetController {
 
     @Operation(
             summary = "Поиск питомца по имени",
+            description = "кличка питомца",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -93,12 +96,13 @@ public class PetController {
             }
     )
     @GetMapping("/")
-    public Collection<Pet> getPet(@Parameter(description = "кличка питомца") @RequestParam String name) {
+    public Collection<Pet> getPet(@RequestParam String name) {
         return petService.getPet(name);
     }
 
     @Operation(
             summary = "Изменить питомца",
+            description = "Параметры питомца",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -117,8 +121,12 @@ public class PetController {
     )
 
     @PutMapping
-    public ResponseEntity<Pet> updatePet(@Parameter(description = "Измененные данные питомца") @RequestParam Pet pet){
-        return ResponseEntity.ok(petService.updatePet(pet));
+    public ResponseEntity<Pet> updatePet(@RequestBody Pet pet) {
+        Pet pet1 = petService.getPetById(pet.getId());
+        if (pet1 != null) {
+            return ResponseEntity.ok(petService.updatePet(pet));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @Operation(
@@ -141,14 +149,16 @@ public class PetController {
             }
     )
 
-    @PutMapping("{id} {date}")
+    @PutMapping("/{id}/{date}")
     public ResponseEntity<Pet> updatePetTrialPeriodById(@Parameter(description = "id питомца") @PathVariable Long id,
-                                                        @Parameter(description = "Новая дата в формате день.месяц.год (15.01.2023)") @PathVariable String date){
-
+                                                        @Parameter(description = "Новая дата в формате день.месяц.год (15.01.2023)") @PathVariable String date) {
+        Pet pet = petService.getPetById(id);
+        if (pet==null){
+            return ResponseEntity.status(404).build();
+        }//Вытаскиваем питомца из базы по id
         if (date.matches("[0-3]\\d\\.[0-1]\\d\\.[2-9]\\d\\d\\d")) { //Проверем дату по регулярному выражению
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy"); //Создаем паттерн для парсинга строки в дату
             LocalDate realDate = LocalDate.parse(date, formatter); // переводим строку в дату
-            Pet pet = petService.getPetById(id); //Вытаскиваем питомца из базы по id
             pet.setTrialPeriod(realDate); // Меняем дату
             return ResponseEntity.ok(petService.updatePet(pet)); // Сохраняем с новой датой
         } else {
@@ -158,6 +168,7 @@ public class PetController {
 
     @Operation(
             summary = "Удаление питомца из приюта",
+            description = "id питомца",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -176,7 +187,7 @@ public class PetController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pet> deletePet(@Parameter(description = "id питомца") @PathVariable Long id) {
+    public ResponseEntity<Pet> deletePet(@PathVariable Long id) {
         Pet pet = petService.getPetById(id);
         if (pet != null) {
             petService.deletePet(id);

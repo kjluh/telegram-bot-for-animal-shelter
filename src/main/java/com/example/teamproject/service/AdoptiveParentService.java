@@ -37,8 +37,12 @@ public class AdoptiveParentService {
      * @param phoneNumber принимает номер телефона пользователя
      */
     private void addUserContact(Long chatId, String name, String messageText, String phoneNumber) {
-        AdoptiveParent adoptiveParent = new AdoptiveParent();
-        adoptiveParent.setChatId(chatId);
+
+        AdoptiveParent adoptiveParent = findAdoptiveParentByChatId(chatId);
+        if (adoptiveParent==null){
+            adoptiveParent = new AdoptiveParent();
+            adoptiveParent.setChatId(chatId);
+        }
         adoptiveParent.setName(name);
         adoptiveParent.setMessage(messageText);
         adoptiveParent.setPhoneNumber(Long.parseLong(phoneNumber));

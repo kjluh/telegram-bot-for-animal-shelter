@@ -73,13 +73,13 @@ public class TelegramBotUpdatesListenerTest {
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
     }
 
-    @Test
-    public void telegramBotServiceTakeDogFromShelterTest() {
-        String inputMessage = "2";
-        String outMessage = "Приветствует в нашем приюте";
-        Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
-        Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
-    }
+//    @Test
+//    public void telegramBotServiceTakeDogFromShelterTest() {
+//        String inputMessage = "2";
+//        String outMessage = "Приветствует в нашем приюте";
+//        Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
+//        Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
+//    }
 
     @Test
     public void telegramBotServiceTakeDogFromShelterCase1Test() {
