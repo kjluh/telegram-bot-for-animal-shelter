@@ -141,7 +141,4 @@ public class AdoptiveParentServiceTest {
         assertEquals(adoptiveParentService.save(adoptiveParent), adoptiveParent);
     }
 
-    @Test
-    public void deleteAdoptiveParentByIdTest() {
-    }
 }

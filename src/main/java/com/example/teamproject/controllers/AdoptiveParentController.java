@@ -117,7 +117,7 @@ public class AdoptiveParentController {
     )
 
     @PutMapping
-    public ResponseEntity<AdoptiveParent> updateAdoptiveParent(@Parameter(description = "Измененные данные усыновителя") @RequestParam AdoptiveParent adoptiveParent){
+    public ResponseEntity<AdoptiveParent> updateAdoptiveParent(@Parameter(description = "Измененные данные усыновителя") @RequestBody AdoptiveParent adoptiveParent){
         return ResponseEntity.ok(adoptiveParensService.updateAdoptiveParent(adoptiveParent));
     }
 

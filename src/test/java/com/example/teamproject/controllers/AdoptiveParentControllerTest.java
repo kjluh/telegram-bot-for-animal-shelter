@@ -2,6 +2,7 @@ package com.example.teamproject.controllers;
 
 import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.service.AdoptiveParentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,9 +19,8 @@ import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,12 +29,16 @@ public class AdoptiveParentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private AdoptiveParent adoptiveParent = new AdoptiveParent();
     private JSONObject adoptiveParentJSON = new JSONObject();
     private Long chatId;
     private String name;
     private String messageText;
     private String phoneNumber;
+
 
     @MockBean
     private AdoptiveParentService adoptiveParentServiceMock;
@@ -74,17 +78,54 @@ public class AdoptiveParentControllerTest {
     }
 
     @Test
-    public void getAllAdoptiveParents() throws Exception {
-        ArrayList adoptiveParentArrayList = new ArrayList<AdoptiveParent>();
+    public void getAllAdoptiveParentsTest() throws Exception {
+        ArrayList<AdoptiveParent> adoptiveParentArrayList = new ArrayList<>();
         adoptiveParentArrayList.add(adoptiveParent);
         adoptiveParentArrayList.add(adoptiveParent);
 
         when(adoptiveParentServiceMock.findAll()).thenReturn(adoptiveParentArrayList);
 
         mockMvc.perform(
-                get("/adoptive_parents"))
+                get("/adoptive_parents/get_all"))
                 .andExpect(status().isOk())
-                .andExpect()
+                .andExpect(content().json(objectMapper.writeValueAsString(adoptiveParentArrayList)));
+
+    }
+
+    @Test
+    public void getAdoptiveParentByIdTest() throws Exception {
+        when(adoptiveParentServiceMock.findAdoptiveParentById(any(Long.class))).thenReturn(adoptiveParent);
+
+        mockMvc.perform(
+                        get("/adoptive_parents/get_by_id?id=123"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.chatId").value(chatId))
+                .andExpect(jsonPath("$.name").value(name))
+                .andExpect(jsonPath("$.message").value(messageText))
+                .andExpect(jsonPath("$.phoneNumber").value(phoneNumber));
+
+    }
+
+    @Test
+    public void updateAdoptiveParentTest() throws Exception {
+        when(adoptiveParentServiceMock.updateAdoptiveParent(any(AdoptiveParent.class))).thenReturn(adoptiveParent);
+
+        mockMvc.perform(
+                        put("/adoptive_parents")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(adoptiveParentJSON.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.chatId").value(chatId))
+                .andExpect(jsonPath("$.name").value(name))
+                .andExpect(jsonPath("$.message").value(messageText))
+                .andExpect(jsonPath("$.phoneNumber").value(phoneNumber));
+    }
+
+    @Test
+    public void deleteAdoptiveParentById() throws Exception {
+        mockMvc.perform(
+                        delete("/adoptive_parents/123"))
+                .andExpect(status().isOk());
 
     }
 }
