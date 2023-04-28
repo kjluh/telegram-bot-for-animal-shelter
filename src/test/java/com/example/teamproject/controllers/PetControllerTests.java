@@ -1,4 +1,4 @@
-package com.example.teamproject.service;
+package com.example.teamproject.controllers;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -48,6 +48,64 @@ class PetControllerTests {
                         post("/pets").contentType(MediaType.ALL_VALUE).content("yfyiukbh"))
                 .andExpect(status().is(415));
     }
+
+    @Test
+    void testUpdatePet() throws Exception {
+        JSONObject testJSONObject = new JSONObject();
+        testJSONObject.put("name", "testCreatePet");
+        testJSONObject.put("id", "1");
+        testJSONObject.put("type", "test");
+        testJSONObject.put("age", "11");
+        testJSONObject.put("description", "description");
+        mockMvc.
+                perform(
+                        post("/pets").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
+                .andExpect(status().isOk());
+
+        JSONObject testUpdateJSONObject = new JSONObject();
+        testUpdateJSONObject.put("name", "Update");
+        testUpdateJSONObject.put("id", "1");
+        testUpdateJSONObject.put("type", "testUpdate");
+        mockMvc.
+                perform(
+                        put("/pets").contentType(MediaType.APPLICATION_JSON).content(testUpdateJSONObject.toString()))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(
+                        get("/pets"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].name").value("Update"))
+                .andExpect(jsonPath("$[0].type").value("testUpdate"));
+    }
+
+    @Test
+    void testUpdatePetError() throws Exception {
+        JSONObject testJSONObject = new JSONObject();
+        testJSONObject.put("name", "testCreatePet");
+        testJSONObject.put("id", "1");
+        testJSONObject.put("type", "test");
+        mockMvc.
+                perform(
+                        put("/pets").contentType(MediaType.ALL_VALUE).content("yfyiukbh"))
+                .andExpect(status().is(415));
+    }
+
+//    @Test
+//    void testUpdateDatePet() throws Exception {
+//        JSONObject testJSONObject = new JSONObject();
+//        testJSONObject.put("name", "UpdateDate");
+//        testJSONObject.put("trialPeriod", "2023-01-01");
+//        mockMvc.
+//                perform(
+//                        put("/pets/2/21.01.2023"))
+//                .andExpect(status().isOk());
+//        mockMvc.perform(
+//                        get("/pets/?name=UpdateDate"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$[0].name").value("UpdateDate"))
+//                .andExpect(jsonPath("$[0].trialPeriod").value("2023-01-21"));
+//    }
 
     @Test
     void testGetPet() throws Exception {
