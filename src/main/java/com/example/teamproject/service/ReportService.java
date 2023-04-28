@@ -36,7 +36,16 @@ public class ReportService {
         return reportRepository.findAll();
     }
     /**
+     * Получаем отчёт по I
+     * @param id для поиска отчёта по Id
+     * @return list объектов класса REPORT из БД
+     */
+    public Report getReportById(Long id) {
+        return reportRepository.findById(id).orElse(null);
+    }
+    /**
      * Получаем список всех отчётов в приюте
+     * @param id для поиска по Id усыновителя
      * @return list объектов класса REPORT из БД
      */
     public Collection<Report> getAllReportsByAdoptiveParent(Long id) {
