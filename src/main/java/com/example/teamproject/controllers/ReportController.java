@@ -1,12 +1,14 @@
 package com.example.teamproject.controllers;
 
 import com.example.teamproject.entities.AdoptiveParent;
+import com.example.teamproject.entities.Pet;
 import com.example.teamproject.entities.Report;
 import com.example.teamproject.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +65,7 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping()
+    @GetMapping("/getAll")
     public ResponseEntity<Collection<Report>> getAllReports() {
         return ResponseEntity.ok(reportService.getAllReports());
     }
@@ -86,9 +88,32 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping("/test/{id}")
+    @GetMapping("/allByAP/{id}")
     public ResponseEntity<Collection<Report>> getAllReportsByAdoptiveParent(@PathVariable Long id) {
         return ResponseEntity.ok(reportService.getAllReportsByAdoptiveParent(id));
+    }
+
+    @Operation(
+            summary = "Получить отчёт по id",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "415",
+                            description = "Ошибка: Что-то пошло не так!",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    )
+            }
+    )
+    @GetMapping("/test/{id}")
+    public ResponseEntity<Report> getReportById(@PathVariable Long id) {
+        return ResponseEntity.ok(reportService.getReportById(id));
     }
 
     @Operation(
@@ -134,6 +159,11 @@ public class ReportController {
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Report> deleteReport(@Parameter(description = "Id отчёта") @PathVariable Long id) {
-        return ResponseEntity.ok(reportService.deleteReport(id));
+        Report report = reportService.getReportById(id);
+        if (report != null) {
+            reportService.deleteReport(id);
+            return ResponseEntity.ok(report);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
