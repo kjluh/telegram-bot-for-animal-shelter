@@ -78,25 +78,24 @@ public class ReportControllerTests {
                 .andExpect(status().is(415));
     }
 
-//    @Test
-//    void testGetReport() throws Exception {
-//        JSONObject testJSONObject = new JSONObject();
-//        testJSONObject.put("diet", "testDiet1");
-//        testJSONObject.put("id", "2");
-//        testJSONObject.put("health", "testHealth1");
-//        testJSONObject.put("behavior", "behaviorHealth1");
-//        mockMvc.
-//                perform(
-//                        post("/Reports").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
-//                .andExpect(status().isOk());
-//        mockMvc.perform(
-//                        get("/Reports/test/1"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.size()").value(2))
-//                .andExpect(jsonPath("$[0].diet").value("testDiet1"))
-//                .andExpect(jsonPath("$[0].health").value("testHealth1"))
-//                .andExpect(jsonPath("$[0].behavior").value("behaviorHealth1"));
-//    }
+    @Test
+    void testGetReport() throws Exception {
+        JSONObject testJSONObject = new JSONObject();
+        testJSONObject.put("diet", "testDiet1");
+        testJSONObject.put("id", "1");
+        testJSONObject.put("health", "testHealth1");
+        testJSONObject.put("behavior", "behaviorHealth1");
+        mockMvc.
+                perform(
+                        post("/Reports").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
+                .andExpect(status().isOk());
+        mockMvc.perform(
+                        get("/Reports/test/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diet").value("testDiet1"))
+                .andExpect(jsonPath("$.health").value("testHealth1"))
+                .andExpect(jsonPath("$.behavior").value("behaviorHealth1"));
+    }
 
 
     @Test
