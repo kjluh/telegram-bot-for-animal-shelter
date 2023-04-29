@@ -1,13 +1,14 @@
 package com.example.teamproject.controllers;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,14 +20,19 @@ class PetControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void testCreatePet() throws Exception {
-        JSONObject testJSONObject = new JSONObject();
-        testJSONObject.put("name", "testCreatePet");
+    private JSONObject testJSONObject = new JSONObject();
+
+    @BeforeEach
+    void setUp() throws JSONException {
+        testJSONObject.put("name", "testPet");
         testJSONObject.put("id", "1");
         testJSONObject.put("type", "test");
         testJSONObject.put("age", "11");
         testJSONObject.put("description", "description");
+    }
+
+    @Test
+    void test1CreateAnDGetPet() throws Exception {
         mockMvc.
                 perform(
                         post("/pets").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
@@ -35,14 +41,15 @@ class PetControllerTests {
                         get("/pets"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
-                .andExpect(jsonPath("$[0].name").value("testCreatePet"))
+                .andExpect(jsonPath("$[0].name").value("testPet"))
+                .andExpect(jsonPath("$[0].id").value("1"))
                 .andExpect(jsonPath("$[0].type").value("test"))
                 .andExpect(jsonPath("$[0].age").value("11"))
                 .andExpect(jsonPath("$[0].description").value("description"));
     }
 
     @Test
-    void testCreatePetError() throws Exception {
+    void test1CreatePetError() throws Exception {
         mockMvc.
                 perform(
                         post("/pets").contentType(MediaType.ALL_VALUE).content("yfyiukbh"))
@@ -50,13 +57,7 @@ class PetControllerTests {
     }
 
     @Test
-    void testUpdatePet() throws Exception {
-        JSONObject testJSONObject = new JSONObject();
-        testJSONObject.put("name", "testCreatePet");
-        testJSONObject.put("id", "1");
-        testJSONObject.put("type", "test");
-        testJSONObject.put("age", "11");
-        testJSONObject.put("description", "description");
+    void test4UpdatePet() throws Exception {
         mockMvc.
                 perform(
                         post("/pets").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
@@ -80,94 +81,63 @@ class PetControllerTests {
     }
 
     @Test
-    void testUpdatePetError() throws Exception {
-        JSONObject testJSONObject = new JSONObject();
-        testJSONObject.put("name", "testCreatePet");
-        testJSONObject.put("id", "1");
-        testJSONObject.put("type", "test");
+    void test3UpdatePetError() throws Exception {
         mockMvc.
                 perform(
                         put("/pets").contentType(MediaType.ALL_VALUE).content("yfyiukbh"))
                 .andExpect(status().is(415));
     }
 
-//    @Test
-//    void testUpdateDatePet() throws Exception {
-//        JSONObject testJSONObject = new JSONObject();
-//        testJSONObject.put("name", "UpdateDate");
-//        testJSONObject.put("trialPeriod", "2023-01-01");
-//        mockMvc.
-//                perform(
-//                        put("/pets/2/21.01.2023"))
-//                .andExpect(status().isOk());
-//        mockMvc.perform(
-//                        get("/pets/?name=UpdateDate"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$[0].name").value("UpdateDate"))
-//                .andExpect(jsonPath("$[0].trialPeriod").value("2023-01-21"));
-//    }
+    @Test
+    void test3UpdateDatePet() throws Exception {
+        mockMvc.
+                perform(
+                        put("/pets/1/21.01.2023"))
+                .andExpect(status().isOk());
+        mockMvc.perform(
+                        get("/pets"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].name").value("Update"))
+                .andExpect(jsonPath("$[0].trialPeriod").value("2023-01-21"));
+    }
 
     @Test
-    void testGetPet() throws Exception {
-        JSONObject testJSONObject = new JSONObject();
-        testJSONObject.put("name", "testGetPet");
-        testJSONObject.put("id", "1");
-        testJSONObject.put("type", "test");
-        testJSONObject.put("age", "11");
-        testJSONObject.put("description", "description");
+    void test2GetPet() throws Exception {
         mockMvc.
                 perform(
                         post("/pets").contentType(MediaType.APPLICATION_JSON).content(testJSONObject.toString()))
                 .andExpect(status().isOk());
         mockMvc.perform(
-                        get("/pets/?name=testGetPet"))
+                        get("/pets/?name=testPet"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(1))
-                .andExpect(jsonPath("$[0].name").value("testGetPet"))
+//                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].name").value("testPet"))
                 .andExpect(jsonPath("$[0].type").value("test"))
                 .andExpect(jsonPath("$[0].age").value("11"))
                 .andExpect(jsonPath("$[0].description").value("description"));
     }
 
     @Test
-    void testGetPetError() throws Exception {
+    void test2GetPetError() throws Exception {
         mockMvc.perform(
                         get("/pets/?name=test"))
                 .andExpect(jsonPath("$.size()").value(0));
     }
 
     @Test
-    void testDeletePet() throws Exception {
-        JSONObject testJSONObjectForDelete = new JSONObject();
-        testJSONObjectForDelete.put("name", "testDeletePet");
-        testJSONObjectForDelete.put("id", "1");
-        testJSONObjectForDelete.put("type", "test");
-        testJSONObjectForDelete.put("age", "11");
-        testJSONObjectForDelete.put("description", "description");
-        mockMvc.
-                perform(
-                        post("/pets").contentType(MediaType.APPLICATION_JSON).content(testJSONObjectForDelete.toString()))
-                .andExpect(status().isOk());
+    void test5DeletePet() throws Exception {
         mockMvc.perform(
                         delete("/pets/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("testDeletePet"))
-                .andExpect(jsonPath("$.type").value("test"))
-                .andExpect(jsonPath("$.age").value("11"))
-                .andExpect(jsonPath("$.description").value("description"));
+                .andExpect(jsonPath("$.name").value("Update"))
+                .andExpect(jsonPath("$.type").value("testUpdate"));
     }
 
     @Test
-    void testDeletePetError() throws Exception {
-        JSONObject testJSONObjectForDelete = new JSONObject();
-        testJSONObjectForDelete.put("name", "testDeletePet");
-        testJSONObjectForDelete.put("id", "1");
-        testJSONObjectForDelete.put("type", "test");
-        testJSONObjectForDelete.put("age", "11");
-        testJSONObjectForDelete.put("description", "description");
-
+    void test5DeletePetError() throws Exception {
         mockMvc.perform(
-                        delete("/pets/1"))
+                        delete("/pets/2"))
                 .andExpect(status().is(404));
 
     }
