@@ -1,32 +1,38 @@
 package com.example.teamproject.controllers;
 
-import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.Pet;
 import com.example.teamproject.service.AdoptiveParentService;
 import com.example.teamproject.service.PetService;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.request.SendMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.HTML;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 @RestController
 @RequestMapping("/pets")
 public class PetController {
-    private final PetService petService;
 
-    public PetController(PetService petService) {
+    @Autowired
+    private TelegramBot telegramBot;
+
+    private final PetService petService;
+    private final AdoptiveParentService adoptiveParentService;
+
+    public PetController(PetService petService, AdoptiveParentService adoptiveParentService) {
         this.petService = petService;
+        this.adoptiveParentService = adoptiveParentService;
     }
 
     @Operation(
@@ -160,6 +166,8 @@ public class PetController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy"); //Создаем паттерн для парсинга строки в дату
             LocalDate realDate = LocalDate.parse(date, formatter); // переводим строку в дату
             pet.setTrialPeriod(realDate); // Меняем дату
+            telegramBot.execute(new SendMessage(adoptiveParentService.findAdoptiveParentById(petService.getAdoptiveParentIdByPetId(pet.getId())).getChatId(),
+                    "Ваш испытательный срок изменился и закончится " + realDate));
             return ResponseEntity.ok(petService.updatePet(pet)); // Сохраняем с новой датой
         } else {
             return ResponseEntity.status(415).build(); // Если дата не верно написана, то возвращаем ошибку
