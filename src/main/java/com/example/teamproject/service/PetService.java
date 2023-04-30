@@ -52,6 +52,15 @@ public class PetService {
     }
 
     /**
+     * Поиск ID усыновителя с помощью ID питомца
+     * @param id ID питомца из БД
+     * @return возвращаем полученный ID усыновителя
+     */
+    public Long getAdoptiveParentIdByPetId(Long id){
+        return petRepository.findAdoptiveParentIdByPetId(id);
+    }
+
+    /**
      * Обновление данных по питомцу
      *
      * @param pet Сущьность нового питомца

@@ -22,7 +22,7 @@ public class ReportControllerTests {
     private MockMvc mockMvc;
 
     @Test
-    void testCreateReport() throws Exception {
+    void test1CreateReport() throws Exception {
         JSONObject testJSONObject = new JSONObject();
         testJSONObject.put("diet", "testDiet");
         testJSONObject.put("id", "1");
@@ -79,7 +79,7 @@ public class ReportControllerTests {
     }
 
     @Test
-    void testGetReport() throws Exception {
+    void test2GetReport() throws Exception {
         JSONObject testJSONObject = new JSONObject();
         testJSONObject.put("diet", "testDiet1");
         testJSONObject.put("id", "1");
