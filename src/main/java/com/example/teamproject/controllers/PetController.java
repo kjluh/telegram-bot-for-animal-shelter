@@ -159,15 +159,17 @@ public class PetController {
     public ResponseEntity<Pet> updatePetTrialPeriodById(@Parameter(description = "id питомца") @PathVariable Long id,
                                                         @Parameter(description = "Новая дата в формате день.месяц.год (15.01.2023)") @PathVariable String date) {
         Pet pet = petService.getPetById(id);
-        if (pet==null){
+        if (pet == null) {
             return ResponseEntity.status(404).build();
         }//Вытаскиваем питомца из базы по id
         if (date.matches("[0-3]\\d\\.[0-1]\\d\\.[2-9]\\d\\d\\d")) { //Проверем дату по регулярному выражению
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy"); //Создаем паттерн для парсинга строки в дату
             LocalDate realDate = LocalDate.parse(date, formatter); // переводим строку в дату
             pet.setTrialPeriod(realDate); // Меняем дату
-            telegramBot.execute(new SendMessage(adoptiveParentService.findAdoptiveParentById(petService.getAdoptiveParentIdByPetId(pet.getId())).getChatId(),
-                    "Ваш испытательный срок изменился и закончится " + realDate));
+            if (pet.getAdoptiveParent() != null) {
+                telegramBot.execute(new SendMessage(adoptiveParentService.findAdoptiveParentById(pet.getId()).getChatId(),
+                        "Ваш испытательный срок изменился и закончится " + realDate));
+            }
             return ResponseEntity.ok(petService.updatePet(pet)); // Сохраняем с новой датой
         } else {
             return ResponseEntity.status(415).build(); // Если дата не верно написана, то возвращаем ошибку
