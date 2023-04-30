@@ -1,6 +1,9 @@
 package com.example.teamproject.listener;
 
+import com.example.teamproject.entities.AdoptiveParent;
+import com.example.teamproject.entities.TypeOfPet;
 import com.example.teamproject.listener.TelegramBotUpdatesListener;
+import com.example.teamproject.service.AdoptiveParentService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -13,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -21,6 +25,12 @@ public class TelegramBotUpdatesListenerTest {
 
     @MockBean
     private TelegramBot telegramBot;
+
+    @MockBean
+    private AdoptiveParent adoptiveParent;
+
+    @MockBean
+    private AdoptiveParentService adoptiveParentService;
 
     @Autowired
     private TelegramBotUpdatesListener telegramBotUpdatesListener;
@@ -73,13 +83,15 @@ public class TelegramBotUpdatesListenerTest {
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
     }
 
-//    @Test
-//    public void telegramBotServiceTakeDogFromShelterTest() {
-//        String inputMessage = "2";
-//        String outMessage = "Приветствует в нашем приюте";
-//        Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
-//        Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
-//    }
+    @Test
+    public void telegramBotServiceTakeDogFromShelterTest() {
+        when(adoptiveParentService.findAdoptiveParentByChatId(any())).thenReturn(adoptiveParent);
+        when(adoptiveParent.getTypeOfPet()).thenReturn(TypeOfPet.DOG);
+        String inputMessage = "2";
+        String outMessage = "Приветствует в нашем приюте";
+        Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
+        Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
+    }
 
     @Test
     public void telegramBotServiceTakeDogFromShelterCase1Test() {
