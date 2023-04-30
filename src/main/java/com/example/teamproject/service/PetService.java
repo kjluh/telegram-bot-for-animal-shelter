@@ -50,6 +50,12 @@ public class PetService {
     public Pet getPetById(Long id){
         return petRepository.findById(id).orElse(null);
     }
+
+    /**
+     * Поиск ID усыновителя с помощью ID питомца
+     * @param id ID питомца из БД
+     * @return возвращаем полученный ID усыновителя
+     */
     public Long getAdoptiveParentIdByPetId(Long id){
         return petRepository.findAdoptiveParentIdByPetId(id);
     }
