@@ -6,6 +6,8 @@ import com.example.teamproject.listener.TelegramBotUpdatesListener;
 import com.example.teamproject.service.AdoptiveParentService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.*;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,10 @@ public class TelegramBotUpdatesListenerTest {
         String outMessage = "Выберите какой приют Вам нужен";
         Assertions.assertThat(testHandlerByChatMassage(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
         Assertions.assertThat(testHandlerByChatMassage(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
+
+        InlineKeyboardButton[][] inlineKeyboardButtons = ((InlineKeyboardMarkup) testHandlerByChatMassage(inputMessage)
+                .getParameters().get("reply_markup")).inlineKeyboard();
+        Assertions.assertThat(inlineKeyboardButtons[0 ].length).isEqualTo(2); //1 ряд кнопок, но в ряду 2 кнопки
     }
 
     @Test
@@ -57,6 +63,10 @@ public class TelegramBotUpdatesListenerTest {
         String outMessage = "Приветствует в нашем приюте";
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
+
+        InlineKeyboardButton[][] inlineKeyboardButtons = ((InlineKeyboardMarkup) testHandlerBySwitch(inputMessage)
+                .getParameters().get("reply_markup")).inlineKeyboard();
+        Assertions.assertThat(inlineKeyboardButtons.length).isEqualTo(6);
     }
 
     @Test
@@ -91,6 +101,10 @@ public class TelegramBotUpdatesListenerTest {
         String outMessage = "Приветствует в нашем приюте";
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
+
+        InlineKeyboardButton[][] inlineKeyboardButtons = ((InlineKeyboardMarkup) testHandlerBySwitch(inputMessage)
+                .getParameters().get("reply_markup")).inlineKeyboard();
+        Assertions.assertThat(inlineKeyboardButtons.length).isEqualTo(12);
     }
 
     @Test
@@ -171,6 +185,10 @@ public class TelegramBotUpdatesListenerTest {
         String outMessage = "Приветствует в нашем приюте";
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("chat_id")).isEqualTo(123L);
         Assertions.assertThat(testHandlerBySwitch(inputMessage).getParameters().get("text")).isEqualTo(outMessage);
+
+        InlineKeyboardButton[][] inlineKeyboardButtons = ((InlineKeyboardMarkup) testHandlerBySwitch(inputMessage)
+                .getParameters().get("reply_markup")).inlineKeyboard();
+        Assertions.assertThat(inlineKeyboardButtons.length).isEqualTo(4);
     }
 
     @Test
