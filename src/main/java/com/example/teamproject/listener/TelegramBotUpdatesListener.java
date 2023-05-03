@@ -43,8 +43,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     private Long chatId;
 
-    private Report tempReport = new Report();
-
     private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
     @PostConstruct
@@ -159,7 +157,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     if (reportService.savePhotoInNewReport((update.message().photo()[update.message().photo().length - 1]).fileId(),
                             adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
                         adoptiveParentService.saveReportStatus(chatId, ReportStatus.SETTING_DIET);
-                        logger.info("Id photo {} ", tempReport.getPhotoId());
+                        logger.info("Id photo added");
                         telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите рацион животного"));
                     } else {
                         telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при добавлении фото, повторите снова."));
@@ -168,7 +166,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 } else if (ReportStatus.SETTING_DIET.equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) {
                     if (reportService.saveDietInNewReport(update.message().text(), adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
                         adoptiveParentService.saveReportStatus(chatId, ReportStatus.SETTING_HEALTH);
-                        logger.info("Diet {} ", tempReport.getDiet());
+                        logger.info("Diet  added");
                         telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите общее самочувствие и привыкание к новому месту"));
                     } else {
                         telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при добавлении диеты, повторите снова."));
@@ -177,7 +175,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 } else if (ReportStatus.SETTING_HEALTH.equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) {
                     if (reportService.saveHealthInNewReport(update.message().text(), adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
                         adoptiveParentService.saveReportStatus(chatId, ReportStatus.SETTING_BEHAVIOR);
-                        logger.info("Health {} ", tempReport.getHealth());
+                        logger.info("Health  added");
                         telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите изменение в поведении: отказ от старых привычек, приобретение новых. Если такие имееются"));
                     } else {
                         telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при добавлении изменения в здоровье, повторите снова."));
@@ -186,7 +184,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 } else if (ReportStatus.SETTING_BEHAVIOR.equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) {
                     if (reportService.saveBehaviorInNewReport(update.message().text(), adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
                         adoptiveParentService.saveReportStatus(chatId, ReportStatus.NONE);
-                        logger.info("Behavior {} ", tempReport.getBehavior());
+                        logger.info("Behavior  added");
                         telegramBot.execute(new SendMessage(chatId, "Спасибо, информация принята!"));
                     } else {
                         telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при добавлении поведения, повторите снова."));

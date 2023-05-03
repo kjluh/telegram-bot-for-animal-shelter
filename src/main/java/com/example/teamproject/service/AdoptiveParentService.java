@@ -127,6 +127,12 @@ public class AdoptiveParentService {
         repository.deleteById(id);
     }
 
+    /**
+     * Записать статус заполнения отчета для пошаговой реализации
+     *
+     * @param chatId
+     * @param status
+     */
     public void saveReportStatus(Long chatId, Util.ReportStatus status) {
         AdoptiveParent adoptiveParent = findAdoptiveParentByChatId(chatId);
         adoptiveParent.setReportStatus(status);

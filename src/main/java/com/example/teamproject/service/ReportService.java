@@ -27,6 +27,13 @@ public class ReportService {
         return newReport;
     }
 
+    /**
+     * Сохранить новый пустой отчет с заполнением полей с питомцем и усыновителем
+     *
+     * @param pet
+     * @param adoptiveParent
+     * @return
+     */
     public Report saveNewReport(Pet pet, AdoptiveParent adoptiveParent) {
         Report newReport = new Report();
         newReport.setPet(pet);
@@ -34,24 +41,52 @@ public class ReportService {
         return loadReport(newReport);
     }
 
+    /**
+     * Сохранить в новый отчет фото
+     *
+     * @param photoId
+     * @param adoptiveParent
+     * @return
+     */
     public Report savePhotoInNewReport(String photoId, AdoptiveParent adoptiveParent) {
         Report report = findLastReportByAdoptiveParentId(adoptiveParent.getId());
         report.setPhotoId(photoId);
         return loadReport(report);
     }
 
+    /**
+     * Сохранить в новый отчет диету
+     *
+     * @param diet
+     * @param adoptiveParent
+     * @return
+     */
     public Report saveDietInNewReport(String diet, AdoptiveParent adoptiveParent) {
         Report report = findLastReportByAdoptiveParentId(adoptiveParent.getId());
         report.setDiet(diet);
         return loadReport(report);
     }
 
+    /**
+     * Сохранить в новый отчет состояние здоровья
+     *
+     * @param health
+     * @param adoptiveParent
+     * @return
+     */
     public Report saveHealthInNewReport(String health, AdoptiveParent adoptiveParent) {
         Report report = findLastReportByAdoptiveParentId(adoptiveParent.getId());
         report.setHealth(health);
         return loadReport(report);
     }
 
+    /**
+     * Сохранить в новый отчет поведение
+     *
+     * @param behavior
+     * @param adoptiveParent
+     * @return
+     */
     public Report saveBehaviorInNewReport(String behavior, AdoptiveParent adoptiveParent) {
         Report report = findLastReportByAdoptiveParentId(adoptiveParent.getId());
         report.setBehavior(behavior);
@@ -83,6 +118,12 @@ public class ReportService {
         return reportRepository.findReportsByAdoptiveParent_Id(id);
     }
 
+    /**
+     * Найти последний отчет в таблице по id усыновителя
+     *
+     * @param id
+     * @return
+     */
     public Report findLastReportByAdoptiveParentId(Long id) {
         return reportRepository.findLastReportByAdoptiveParentId(id);
     }
