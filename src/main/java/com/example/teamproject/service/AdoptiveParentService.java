@@ -1,25 +1,15 @@
 package com.example.teamproject.service;
 
 import com.example.teamproject.entities.AdoptiveParent;
-import com.example.teamproject.entities.Pet;
 import com.example.teamproject.entities.TypeOfPet;
 import com.example.teamproject.repositories.AdoptiveParentRepository;
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.PhotoSize;
-import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.GetFile;
+import com.example.teamproject.utils.Util;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.GetFileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.UUID;
 import java.util.regex.Matcher;
 
 @Service
@@ -135,5 +125,11 @@ public class AdoptiveParentService {
      */
     public void deleteAdoptiveParentById(Long id) {
         repository.deleteById(id);
+    }
+
+    public void saveReportStatus(Long chatId, Util.ReportStatus status) {
+        AdoptiveParent adoptiveParent = findAdoptiveParentByChatId(chatId);
+        adoptiveParent.setReportStatus(status);
+        save(adoptiveParent);
     }
 }

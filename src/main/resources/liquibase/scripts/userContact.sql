@@ -33,3 +33,6 @@ CREATE TABLE pet (
                         description text,
                         trial_period DATE
 );
+
+--changeSet konstantin:4
+ALTER TABLE adoptive_parent ADD COLUMN report_status smallint;
