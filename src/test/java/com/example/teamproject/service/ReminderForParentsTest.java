@@ -35,14 +35,11 @@ public class ReminderForParentsTest {
     @MockBean
     private TelegramBotUpdatesListener telegramBotUpdatesListener;
 
-    @Autowired
+    @MockBean
     private AdoptiveParentRepository adoptiveParentRepository;
 
     @Autowired
     private ReminderForParents reminderForParents;
-
-    @Autowired
-    private VolunteerService volunteerService;
 
     @Test
     void checkForReportsTest() {
@@ -68,22 +65,12 @@ public class ReminderForParentsTest {
         Collection<Report> reports = new ArrayList<>();
         reports.add(report);
         adoptiveParent.setReports(reports);
-        adoptiveParentRepository.save(adoptiveParent);
+        List<AdoptiveParent> adoptiveParents = new ArrayList<>();
+        adoptiveParents.add(adoptiveParent);
+        when(adoptiveParentRepository.save(adoptiveParent)).thenReturn(adoptiveParent);
+        when(adoptiveParentRepository.findAll()).thenReturn(adoptiveParents);
 
         reminderForParents.checkForReports();
-
-//        adoptiveParents = adoptiveParentRepository.findAll(); // получаем всех усыновителей
-//        for (AdoptiveParent aPs : adoptiveParents) { //идем по списку усыновителей
-//             reports = aPs.getReports(); // получаем список всех отчетов о питомцев от одного усыновителя
-//            LocalDate localDate = reports.stream().map(Report::getReportDate).max(LocalDate::compareTo).orElse(null);
-//            if (!localDate.equals(LocalDate.now())) {
-//                telegramBot.execute(new SendMessage(aPs.getChatId(), "ВЫ Не Отправили сегодня сообщение о состоянии питомца"));
-//                return;
-//            }
-//            if (!localDate.equals(LocalDate.now().minusDays(1)) && !localDate.equals(LocalDate.now())) {
-//                telegramBot.execute(new SendMessage(volunteerService.getVolunteerChat(), "Пользователь" + aPs + " не отправляет отчеты"));
-//            }
-//        }
 
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
         when(telegramBot.execute(argumentCaptor.capture())).thenReturn(null);
