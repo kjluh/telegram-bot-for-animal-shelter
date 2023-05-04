@@ -143,17 +143,25 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 /**
                  * Поэтапное сохранение ежедневного отчёта о питомце
                  */
+                // Если перечисление STARTING равно параметру ReportStarting в таблице усыновителя по ChatId
+                // Сделана проверка, что бы слева стояло перечисление, что бы предотвратить NullPointerException, т.к.
+                // в таблице значение поля может быть NULL
                 else if (ReportStatus.STARTING.equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) {
+                    // Создаем новый отчет методом reportService.saveNewReport() этот метод возвращает сам отчет в качестве
+                    // успешного выполнения. Проверяем на NULL. Если не null значит отчет успешно создался и сохранился
                     if (reportService.saveNewReport(petService.getPetById(Long.valueOf(update.message().text())),
                             adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
+                        // Меняем статус заполнения отчета в усыновителе
                         adoptiveParentService.saveReportStatus(chatId, ReportStatus.ADDING_PHOTO);
                         telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, вышлите фото животного"));
                     } else {
+                        // Если отчет не создался, то пишем пользователю об ошибке
                         telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при создании отчета, повторите снова."));
                     }
 
                 } else if (update.message().photo() != null && ReportStatus.ADDING_PHOTO
                         .equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) { // проверяем что пришло фото
+                    // Здесь сохраняем фото в отчет и успешный ответ не null
                     if (reportService.savePhotoInNewReport((update.message().photo()[update.message().photo().length - 1]).fileId(),
                             adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
                         adoptiveParentService.saveReportStatus(chatId, ReportStatus.SETTING_DIET);

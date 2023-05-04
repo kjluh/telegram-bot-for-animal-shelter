@@ -49,6 +49,7 @@ public class ReportService {
      * @return
      */
     public Report savePhotoInNewReport(String photoId, AdoptiveParent adoptiveParent) {
+        // Находим последний отчет у этого пользователя
         Report report = findLastReportByAdoptiveParentId(adoptiveParent.getId());
         report.setPhotoId(photoId);
         return loadReport(report);
