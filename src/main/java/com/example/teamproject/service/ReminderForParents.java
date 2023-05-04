@@ -38,12 +38,12 @@ public class ReminderForParents {
         for (AdoptiveParent aPs : adoptiveParents) { //идем по списку усыновителей
             Collection<Report> reports = aPs.getReports(); // получаем список всех отчетов о питомцев от одного усыновителя
             LocalDate localDate = reports.stream().map(Report::getReportDate).max(LocalDate::compareTo).orElse(null);
-            if (!localDate.equals(LocalDate.now())) {
+            if (localDate.isBefore(LocalDate.now().minusDays(1)) && !localDate.equals(LocalDate.now())) {
+                telegramBot.execute(new SendMessage(volunteerService.getVolunteerChat(), "Пользователь" + aPs + " не отправляет отчеты"));
+            }
+            else if (!localDate.equals(LocalDate.now())) {
                 telegramBot.execute(new SendMessage(aPs.getChatId(), "ВЫ Не Отправили сегодня сообщение о состоянии питомца"));
                 return;
-            }
-            if (!localDate.equals(LocalDate.now().minusDays(1)) && !localDate.equals(LocalDate.now())) {
-                telegramBot.execute(new SendMessage(volunteerService.getVolunteerChat(), "Пользователь" + aPs + " не отправляет отчеты"));
             }
         }
     }
