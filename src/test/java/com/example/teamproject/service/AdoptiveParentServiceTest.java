@@ -4,6 +4,7 @@ import com.example.teamproject.entities.AdoptiveParent;
 import com.example.teamproject.entities.TypeOfPet;
 import com.example.teamproject.listener.TelegramBotUpdatesListener;
 import com.example.teamproject.repositories.AdoptiveParentRepository;
+import com.example.teamproject.utils.Util;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -75,11 +76,12 @@ public class AdoptiveParentServiceTest {
 
     @Test
     public void saveInfoDataBaseTest(){
-
+// НЕ ИДЕТ
         Update update = mock(Update.class);
         Message message = mock(Message.class);
         Chat chat = mock(Chat.class);
         when(chat.id()).thenReturn(123L);
+        when(adoptiveParentService.findAdoptiveParentByChatId(any())).thenReturn(adoptiveParent);
         when(message.text()).thenReturn("89991122333 name text message");
         when(message.chat()).thenReturn(chat);
         when(update.message()).thenReturn(message);
@@ -95,11 +97,12 @@ public class AdoptiveParentServiceTest {
 
     @Test
     public void saveInfoDataBaseErrorTest(){
-
+// НЕ ИДЕТ
         Update update = mock(Update.class);
         Message message = mock(Message.class);
         Chat chat = mock(Chat.class);
         when(chat.id()).thenReturn(123L);
+        when(adoptiveParentService.findAdoptiveParentByChatId(any())).thenReturn(adoptiveParent);
         when(message.text()).thenReturn("1 name text message");
         when(message.chat()).thenReturn(chat);
         when(update.message()).thenReturn(message);
