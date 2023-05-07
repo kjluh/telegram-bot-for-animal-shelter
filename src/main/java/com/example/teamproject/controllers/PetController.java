@@ -23,16 +23,14 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/pets")
 public class PetController {
-
-    @Autowired
     private TelegramBot telegramBot;
-
     private final PetService petService;
     private final AdoptiveParentService adoptiveParentService;
 
-    public PetController(PetService petService, AdoptiveParentService adoptiveParentService) {
+    public PetController(PetService petService, AdoptiveParentService adoptiveParentService, TelegramBot telegramBot) {
         this.petService = petService;
         this.adoptiveParentService = adoptiveParentService;
+        this.telegramBot = telegramBot;
     }
 
     @Operation(

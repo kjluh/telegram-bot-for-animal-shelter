@@ -70,6 +70,7 @@ public class AdoptiveParent {
     /**
      * Сохраняем статус пользователя кошки, собаки
      */
+    @Enumerated(EnumType.STRING)
     private TypeOfPet typeOfPet;
 
     @Override

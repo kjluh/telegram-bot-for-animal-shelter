@@ -19,14 +19,17 @@ import java.util.List;
 @EnableScheduling
 public class ReminderForParents {
 
-    @Autowired
     private TelegramBot telegramBot;
 
-    @Autowired
     private VolunteerService volunteerService;
 
-    @Autowired
     private AdoptiveParentRepository adoptiveParentRepository;
+
+    public ReminderForParents(TelegramBot telegramBot, VolunteerService volunteerService, AdoptiveParentRepository adoptiveParentRepository) {
+        this.telegramBot = telegramBot;
+        this.volunteerService = volunteerService;
+        this.adoptiveParentRepository = adoptiveParentRepository;
+    }
 
     /**
      * Метод каждый день в 23:59 проверяет - отправлял ли пользователь отчет о питомце, если нет напоминает ему.

@@ -14,9 +14,11 @@ import java.util.regex.Matcher;
 
 @Service
 public class AdoptiveParentService {
-
-    @Autowired
     private AdoptiveParentRepository repository;
+
+    public AdoptiveParentService(AdoptiveParentRepository repository) {
+        this.repository = repository;
+    }
 
     /**
      * Метод сохранения запроса пользователя в БД использует метод {@link JpaRepository#save(Object)}

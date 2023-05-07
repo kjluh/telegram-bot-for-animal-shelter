@@ -8,7 +8,7 @@ CREATE TABLE adoptive_parent (
                        phone_number bigint,
                        address text,
                        message text,
-                       type_of_pet smallint
+                       type_of_pet text
 );
 
 --changeSet stepan:2
