@@ -110,7 +110,7 @@ public class TelegramBotService {
 
         InlineKeyboardButton button1 = new InlineKeyboardButton("Узнать информацию о приюте!");
         button1.callbackData("1");
-        InlineKeyboardButton button2 = new InlineKeyboardButton("Как взять собаку из приюта?");
+        InlineKeyboardButton button2 = new InlineKeyboardButton("Как взять животного из приюта?");
         button2.callbackData("2");
         InlineKeyboardButton button3 = new InlineKeyboardButton("Прислать отчет о питомце");
         button3.callbackData("3");

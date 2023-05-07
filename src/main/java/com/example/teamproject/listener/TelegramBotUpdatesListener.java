@@ -87,11 +87,11 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case "рекомендации о ТБ" ->
                                 telegramBot.execute(new SendMessage(chatId, "тут должны быть общие рекомендации о технике безопасности на территории приюта."));
 
-                        case "2" -> telegramBotService.takeDogFromShelter(chatId);
+                        case "2" -> telegramBotService.takePetFromShelter(chatId);
                         case "Правила знакомства" ->
-                                telegramBot.execute(new SendMessage(chatId, " тут должны быть правила знакомства с собакой до того, как можно забрать ее из приюта."));
+                                telegramBot.execute(new SendMessage(chatId, " тут должны быть правила знакомства с животным до того, как можно забрать ее из приюта."));
                         case "Список документов" ->
-                                telegramBot.execute(new SendMessage(chatId, " тут должен быть список документов, необходимых для того, чтобы взять собаку из приюта."));
+                                telegramBot.execute(new SendMessage(chatId, " тут должен быть список документов, необходимых для того, чтобы взять животного из приюта."));
                         case "транспортировка животного" ->
                                 telegramBot.execute(new SendMessage(chatId, " тут должно быть список рекомендаций по транспортировке животного."));
                         case "дома для щенка" ->
@@ -105,7 +105,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case "список кинологов" ->
                                 telegramBot.execute(new SendMessage(chatId, " тут должны быть рекомендации по проверенным кинологам для дальнейшего обращения к ним."));
                         case "список причин для отказа" ->
-                                telegramBot.execute(new SendMessage(chatId, " тут должен быть список причин, почему могут отказать и не дать забрать собаку из приюта."));
+                                telegramBot.execute(new SendMessage(chatId, " тут должен быть список причин, почему могут отказать и не дать забрать животного из приюта."));
 
                         case "3" -> telegramBotService.sendReport(chatId);
                         case "Форма ежедневного отчёта" ->
@@ -115,8 +115,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             telegramBot.execute(new SendMessage(chatId, "Напишите Id животного, для которого составляется отчёт"));
                             adoptiveParentService.saveReportStatus(chatId, ReportStatus.STARTING);
                         }
-                        case "позвать волонтера" ->
-                                telegramBot.execute(volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username()));
+                        case "позвать волонтера" -> {
+                            telegramBot.execute(volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username()));
+                            telegramBot.execute(new SendMessage(chatId, "Ожидайте сообщение от волонтёра"));
+                        }
                         case "записать данные" ->
                                 telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
                         case "Главное меню" -> {
