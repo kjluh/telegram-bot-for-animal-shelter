@@ -1,8 +1,5 @@
 package com.example.teamproject.listener;
-
 import static com.example.teamproject.utils.Util.*;
-
-import com.example.teamproject.entities.Report;
 import com.example.teamproject.entities.TypeOfPet;
 import com.example.teamproject.service.*;
 import com.pengrad.telegrambot.TelegramBot;
@@ -12,10 +9,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,23 +17,25 @@ import java.util.regex.Pattern;
 @Service
 public class TelegramBotUpdatesListener implements UpdatesListener {
 
-    @Autowired
     private TelegramBot telegramBot;
-
-    @Autowired
     private TelegramBotService telegramBotService;
-
-    @Autowired
     private AdoptiveParentService adoptiveParentService;
-
-    @Autowired
     private ReportService reportService;
-
-    @Autowired
     private PetService petService;
-
-    @Autowired
     private VolunteerService volunteerService;
+
+    public TelegramBotUpdatesListener(TelegramBot telegramBot,
+                                      TelegramBotService telegramBotService,
+                                      AdoptiveParentService adoptiveParentService,
+                                      ReportService reportService, PetService petService,
+                                      VolunteerService volunteerService) {
+        this.telegramBot = telegramBot;
+        this.telegramBotService = telegramBotService;
+        this.adoptiveParentService = adoptiveParentService;
+        this.reportService = reportService;
+        this.petService = petService;
+        this.volunteerService = volunteerService;
+    }
 
     private Long chatId;
 
@@ -56,7 +52,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private static final Pattern TELEPHONE_MESSAGE = Pattern.compile(
             "(\\d{11})(\\s)([А-яA-z)]+)(\\s)([А-яA-z)\\s\\d]+)"); // парсим сообщение на группы по круглым скобкам
 
-
     @Override
     public int process(List<Update> updates) {
         try {
@@ -68,7 +63,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                  */
                 if (update.callbackQuery() != null) {  // обработка этапа 0
                     chatId = update.callbackQuery().message().chat().id();
-                    String data = update.callbackQuery().data();
+                    String data = (update.callbackQuery().data());
                     switch (data) {
 
                         case "cat" -> {
@@ -79,7 +74,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             adoptiveParentService.saveParentDataBase(chatId, TypeOfPet.DOG);
                             telegramBotService.firstMenu(chatId);
                         }
-                        case "1" -> telegramBotService.shelterInfo(chatId);
+                        case  -> telegramBotService.shelterInfo(chatId);
                         case "инфа о приюте" ->
                                 telegramBot.execute(new SendMessage(chatId, "тут должна быть информация о приюте."));
                         case "расписание работы" ->
@@ -87,7 +82,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case "рекомендации о ТБ" ->
                                 telegramBot.execute(new SendMessage(chatId, "тут должны быть общие рекомендации о технике безопасности на территории приюта."));
 
-                        case "2" -> telegramBotService.takeDogFromShelter(chatId);
+                        case "2" -> telegramBotService.takePetFromShelter(chatId);
                         case "Правила знакомства" ->
                                 telegramBot.execute(new SendMessage(chatId, " тут должны быть правила знакомства с собакой до того, как можно забрать ее из приюта."));
                         case "Список документов" ->
