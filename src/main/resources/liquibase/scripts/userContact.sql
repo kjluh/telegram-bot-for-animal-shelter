@@ -8,7 +8,7 @@ CREATE TABLE adoptive_parent (
                        phone_number bigint,
                        address text,
                        message text,
-                       type_of_pet smallint
+                       type_of_pet text
 );
 
 --changeSet stepan:2
@@ -33,3 +33,6 @@ CREATE TABLE pet (
                         description text,
                         trial_period DATE
 );
+
+--changeSet konstantin:4
+ALTER TABLE adoptive_parent ADD COLUMN report_status smallint;

@@ -1,5 +1,7 @@
 package com.example.teamproject.listener;
 
+import static com.example.teamproject.utils.Util.*;
+
 import com.example.teamproject.entities.Report;
 import com.example.teamproject.entities.TypeOfPet;
 import com.example.teamproject.service.*;
@@ -39,8 +41,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Autowired
     private VolunteerService volunteerService;
 
-    private int tempNumber;
-    private Report tempReport = new Report();
+    private Long chatId;
 
     private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
@@ -54,7 +55,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
      */
     private static final Pattern TELEPHONE_MESSAGE = Pattern.compile(
             "(\\d{11})(\\s)([А-яA-z)]+)(\\s)([А-яA-z)\\s\\d]+)"); // парсим сообщение на группы по круглым скобкам
-    Long chatId;
+
 
     @Override
     public int process(List<Update> updates) {
@@ -86,11 +87,11 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case "рекомендации о ТБ" ->
                                 telegramBot.execute(new SendMessage(chatId, "тут должны быть общие рекомендации о технике безопасности на территории приюта."));
 
-                        case "2" -> telegramBotService.takeDogFromShelter(chatId);
+                        case "2" -> telegramBotService.takePetFromShelter(chatId);
                         case "Правила знакомства" ->
-                                telegramBot.execute(new SendMessage(chatId, " тут должны быть правила знакомства с собакой до того, как можно забрать ее из приюта."));
+                                telegramBot.execute(new SendMessage(chatId, " тут должны быть правила знакомства с животным до того, как можно забрать ее из приюта."));
                         case "Список документов" ->
-                                telegramBot.execute(new SendMessage(chatId, " тут должен быть список документов, необходимых для того, чтобы взять собаку из приюта."));
+                                telegramBot.execute(new SendMessage(chatId, " тут должен быть список документов, необходимых для того, чтобы взять животного из приюта."));
                         case "транспортировка животного" ->
                                 telegramBot.execute(new SendMessage(chatId, " тут должно быть список рекомендаций по транспортировке животного."));
                         case "дома для щенка" ->
@@ -104,7 +105,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case "список кинологов" ->
                                 telegramBot.execute(new SendMessage(chatId, " тут должны быть рекомендации по проверенным кинологам для дальнейшего обращения к ним."));
                         case "список причин для отказа" ->
-                                telegramBot.execute(new SendMessage(chatId, " тут должен быть список причин, почему могут отказать и не дать забрать собаку из приюта."));
+                                telegramBot.execute(new SendMessage(chatId, " тут должен быть список причин, почему могут отказать и не дать забрать животного из приюта."));
 
                         case "3" -> telegramBotService.sendReport(chatId);
                         case "Форма ежедневного отчёта" ->
@@ -112,10 +113,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                         "3. Общее самочувствие и привыкание к новому месту \n4. Изменение в поведении"));
                         case "принимаем отчет" -> {
                             telegramBot.execute(new SendMessage(chatId, "Напишите Id животного, для которого составляется отчёт"));
-                            tempNumber = 1;
+                            adoptiveParentService.saveReportStatus(chatId, ReportStatus.STARTING);
                         }
-                        case "позвать волонтера" ->
-                                telegramBot.execute(volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username()));
+                        case "позвать волонтера" -> {
+                            telegramBot.execute(volunteerService.sendMessageVolunteer(update.callbackQuery().message().from().username()));
+                            telegramBot.execute(new SendMessage(chatId, "Ожидайте сообщение от волонтёра"));
+                        }
                         case "записать данные" ->
                                 telegramBot.execute(new SendMessage(chatId, "Введите номер телефона и вопрос в формате: 89001122333 Имя Ваш вопрос"));
                         case "Главное меню" -> {
@@ -142,34 +145,60 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 /**
                  * Поэтапное сохранение ежедневного отчёта о питомце
                  */
-                else if (tempNumber == 1) {
-                    tempReport.setPet(petService.getPetById(Long.valueOf(update.message().text())));
-                    tempReport.setAdoptiveParent(adoptiveParentService.findAdoptiveParentByChatId(chatId));
-                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, вышлите фото животного"));
-                    tempNumber = 2;
-                } else if (update.message().photo() != null && tempNumber == 2) { // проверяем что пришло фото
-                    tempReport.setPhotoId((update.message().photo()[update.message().photo().length - 1]).fileId());
-                    logger.info("Id photo {} ", tempReport.getPhotoId());
-                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите рацион животного"));
-                    tempNumber = 3;
-                } else if (tempNumber == 3) {
-                    tempReport.setDiet(update.message().text());
-                    logger.info("Diet {} ", tempReport.getDiet());
-                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите общее самочувствие и привыкание к новому месту"));
-                    tempNumber = 4;
-                } else if (tempNumber == 4) {
-                    tempReport.setHealth(update.message().text());
-                    logger.info("Health {} ", tempReport.getHealth());
-                    telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите изменение в поведении: отказ от старых привычек, приобретение новых. Если такие имееются"));
-                    tempNumber = 5;
-                } else if (tempNumber == 5) {
-                    tempReport.setBehavior(update.message().text());
-                    logger.info("Behavior {} ", tempReport.getBehavior());
-                    telegramBot.execute(new SendMessage(chatId, "Спасибо, информации принята!"));
-                    tempNumber = 0;
-                    tempReport.setReportDate(LocalDate.now());
-                    reportService.loadReport(tempReport);
+                // Если перечисление STARTING равно параметру ReportStarting в таблице усыновителя по ChatId
+                // Сделана проверка, что бы слева стояло перечисление, что бы предотвратить NullPointerException, т.к.
+                // в таблице значение поля может быть NULL
+                else if (ReportStatus.STARTING.equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) {
+                    // Создаем новый отчет методом reportService.saveNewReport() этот метод возвращает сам отчет в качестве
+                    // успешного выполнения. Проверяем на NULL. Если не null значит отчет успешно создался и сохранился
+                    if (reportService.saveNewReport(petService.getPetById(Long.valueOf(update.message().text())),
+                            adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
+                        // Меняем статус заполнения отчета в усыновителе
+                        adoptiveParentService.saveReportStatus(chatId, ReportStatus.ADDING_PHOTO);
+                        telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, вышлите фото животного"));
+                    } else {
+                        // Если отчет не создался, то пишем пользователю об ошибке
+                        telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при создании отчета, повторите снова."));
+                    }
 
+                } else if (update.message().photo() != null && ReportStatus.ADDING_PHOTO
+                        .equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) { // проверяем что пришло фото
+                    // Здесь сохраняем фото в отчет и успешный ответ не null
+                    if (reportService.savePhotoInNewReport((update.message().photo()[update.message().photo().length - 1]).fileId(),
+                            adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
+                        adoptiveParentService.saveReportStatus(chatId, ReportStatus.SETTING_DIET);
+                        logger.info("Id photo added");
+                        telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите рацион животного"));
+                    } else {
+                        telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при добавлении фото, повторите снова."));
+                    }
+
+                } else if (ReportStatus.SETTING_DIET.equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) {
+                    if (reportService.saveDietInNewReport(update.message().text(), adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
+                        adoptiveParentService.saveReportStatus(chatId, ReportStatus.SETTING_HEALTH);
+                        logger.info("Diet  added");
+                        telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите общее самочувствие и привыкание к новому месту"));
+                    } else {
+                        telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при добавлении диеты, повторите снова."));
+                    }
+
+                } else if (ReportStatus.SETTING_HEALTH.equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) {
+                    if (reportService.saveHealthInNewReport(update.message().text(), adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
+                        adoptiveParentService.saveReportStatus(chatId, ReportStatus.SETTING_BEHAVIOR);
+                        logger.info("Health  added");
+                        telegramBot.execute(new SendMessage(chatId, "Теперь, пожалуйста, пришлите изменение в поведении: отказ от старых привычек, приобретение новых. Если такие имееются"));
+                    } else {
+                        telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при добавлении изменения в здоровье, повторите снова."));
+                    }
+
+                } else if (ReportStatus.SETTING_BEHAVIOR.equals(adoptiveParentService.findAdoptiveParentByChatId(chatId).getReportStatus())) {
+                    if (reportService.saveBehaviorInNewReport(update.message().text(), adoptiveParentService.findAdoptiveParentByChatId(chatId)) != null) {
+                        adoptiveParentService.saveReportStatus(chatId, ReportStatus.NONE);
+                        logger.info("Behavior  added");
+                        telegramBot.execute(new SendMessage(chatId, "Спасибо, информация принята!"));
+                    } else {
+                        telegramBot.execute(new SendMessage(chatId, "Произошла ошибка при добавлении поведения, повторите снова."));
+                    }
                 }
 
                 /**

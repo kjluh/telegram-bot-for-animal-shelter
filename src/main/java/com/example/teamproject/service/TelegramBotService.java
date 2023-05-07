@@ -5,17 +5,19 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TelegramBotService {
 
-    @Autowired
     private TelegramBot telegramBot;
 
-    @Autowired
     private AdoptiveParentService adoptiveParentService;
+
+    public TelegramBotService(TelegramBot telegramBot, AdoptiveParentService adoptiveParentService) {
+        this.telegramBot = telegramBot;
+        this.adoptiveParentService = adoptiveParentService;
+    }
 
     /**
      * Метод показывает пользователю кнопу "записать данные" в чате бота, использует {@link InlineKeyboardButton}
@@ -34,7 +36,7 @@ public class TelegramBotService {
      *
      * @param chatId принимает ID чата, где отобразит кнопки
      */
-    public void takeDogFromShelter(Long chatId) {  // кнопки этапа 2, кейсы между 2 и 3
+    public void takePetFromShelter(Long chatId) {  // кнопки этапа 2, кейсы между 2 и 3
         SendMessage message = new SendMessage(chatId, "Приветствует в нашем приюте");
 
         InlineKeyboardButton button1 = new InlineKeyboardButton("Правила знакомства с животным до того, как забрать его из приюта.");
@@ -108,7 +110,7 @@ public class TelegramBotService {
 
         InlineKeyboardButton button1 = new InlineKeyboardButton("Узнать информацию о приюте!");
         button1.callbackData("1");
-        InlineKeyboardButton button2 = new InlineKeyboardButton("Как взять собаку из приюта?");
+        InlineKeyboardButton button2 = new InlineKeyboardButton("Как взять животного из приюта?");
         button2.callbackData("2");
         InlineKeyboardButton button3 = new InlineKeyboardButton("Прислать отчет о питомце");
         button3.callbackData("3");

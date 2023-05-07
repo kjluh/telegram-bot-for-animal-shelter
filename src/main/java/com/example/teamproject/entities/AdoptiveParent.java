@@ -1,5 +1,6 @@
 package com.example.teamproject.entities;
 
+import com.example.teamproject.utils.Util;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +51,11 @@ public class AdoptiveParent {
     private String message;
 
     /**
+     * Статус заполнения отчета о питомце
+     */
+    private Util.ReportStatus reportStatus;
+
+    /**
      * Отчеты от пользователя по питомцу
      */
     @OneToMany(mappedBy = "adoptiveParent")
@@ -64,6 +70,7 @@ public class AdoptiveParent {
     /**
      * Сохраняем статус пользователя кошки, собаки
      */
+    @Enumerated(EnumType.STRING)
     private TypeOfPet typeOfPet;
 
     @Override
@@ -92,4 +99,5 @@ public class AdoptiveParent {
     public int hashCode() {
         return Objects.hash(id, chatId, name, phoneNumber);
     }
+
 }
